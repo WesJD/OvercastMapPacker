@@ -1,6 +1,5 @@
 package com.github.wesjd.overcastmappacker.mc.command;
 
-import com.github.wesjd.overcastmappacker.mc.XMLWorld;
 import com.github.wesjd.overcastmappacker.mc.XMLWorldHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -50,7 +49,7 @@ public class XMLCommand implements CommandExecutor {
                 final String output = sb.toString().trim();
                 final World bukkitWorld = Bukkit.getWorld(output);
                 if(bukkitWorld != null) {
-                    XMLWorldHandler.getInstance().getWorld(bukkitWorld).edit(player);
+                    XMLWorldHandler.getInstance().getWorld(bukkitWorld).setEditor(player);
                     return true;
                 } else player.sendMessage(ChatColor.RED + "The world \"" + output + "\" does not exist on this server.");
             } else player.sendMessage(ChatColor.RED + "Usage: /xml <world name>");
