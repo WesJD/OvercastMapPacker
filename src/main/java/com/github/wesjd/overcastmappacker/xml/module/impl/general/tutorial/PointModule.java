@@ -17,6 +17,6 @@ public class PointModule extends XMLModule {
 
     @Override
     protected List<XMLAttribute> getAttributes() {
-        return Arrays.asList(new XMLAttribute("yaw", "90", null, true, true),new XMLAttribute("pitch", "50", null, true, true));
+        return Arrays.asList(new XMLAttribute("yaw", "90", null, true, true),new XMLAttribute("pitch", "50", null, true, true),new XMLAttribute("angle", "0", null, true, true));
     }
 }
