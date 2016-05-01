@@ -4,13 +4,10 @@ import com.github.wesjd.overcastmappacker.OvercastMapPacker;
 import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.attributes.XMLAttribute;
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
+import org.apache.xml.serialize.OutputFormat;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.xpath.XPathFactory;
 import java.util.Arrays;
 import java.util.List;
 

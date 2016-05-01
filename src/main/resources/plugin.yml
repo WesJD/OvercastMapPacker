@@ -1,0 +1,8 @@
+name: OvercastMapPacker
+author: WesJD
+desc: Writes map XMLs for Overcast Network maps from in-game GUIs
+website: https://github.com/WesJD/OvercastMapPacker
+main: com.github.wesjd.overcastmappacker.OvercastMapPacker
+version: ${version}
+commands:
+  xml:

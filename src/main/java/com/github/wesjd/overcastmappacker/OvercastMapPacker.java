@@ -1,5 +1,6 @@
 package com.github.wesjd.overcastmappacker;
 
+import com.github.wesjd.overcastmappacker.mc.command.XMLCommand;
 import com.github.wesjd.overcastmappacker.util.ContinuingMap;
 import com.github.wesjd.overcastmappacker.xml.DocumentHandler;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.ContributorModule;
@@ -7,6 +8,7 @@ import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.NameModul
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.ObjectiveModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.VersionModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.parents.ContributorsParentModule;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 
@@ -33,18 +35,29 @@ import java.io.File;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class OvercastMapPacker {
+public class OvercastMapPacker extends JavaPlugin {
 
     public static final String MAP_PROTOCOL_NUMBER = "1.4.0";
 
-    public static void main(String[] args) {
-        final DocumentHandler handler = DocumentHandler.createNewXMLFile(new File("C:/Users/Wesley Smith/Desktop", "test.xml"));
-        handler.set(null, NameModule.class, "A Test Map");
-        handler.set(null, NameModule.class, "HI I CHANGED PROPERLY");
-        handler.set(null, VersionModule.class, "1.0.0");
-        handler.set(null, ObjectiveModule.class, "A description.");
-        handler.set(ContributorsParentModule.class, ContributorModule.class, "A contributor.", ContinuingMap.from("contribution", "Helping.").add("uuid", "a-u-u-i-d"));
-        handler.saveDocument();
+    private static OvercastMapPacker instance;
+
+    @Override
+    public void onLoad() {
+        instance = this;
+    }
+
+    @Override
+    public void onEnable() {
+        getCommand("xml").setExecutor(new XMLCommand());
+    }
+
+    @Override
+    public void onDisable() {
+        instance = null;
+    }
+
+    public static OvercastMapPacker getInstance() {
+        return instance;
     }
 
 }
