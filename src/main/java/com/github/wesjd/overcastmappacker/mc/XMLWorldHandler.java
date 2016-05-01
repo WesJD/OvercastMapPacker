@@ -5,6 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,6 +52,14 @@ public class XMLWorldHandler {
         worlds.add(ret);
         return ret;
     }
+
+    public Collection<XMLWorld> getAndRemoveAll() {
+        final Collection<XMLWorld> ret = Collections.unmodifiableCollection(worlds);
+        worlds.clear();
+        return ret;
+    }
+
+
 
     public static XMLWorldHandler getInstance() {
         return instance;

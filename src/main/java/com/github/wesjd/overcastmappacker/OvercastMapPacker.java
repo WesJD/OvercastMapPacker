@@ -1,5 +1,6 @@
 package com.github.wesjd.overcastmappacker;
 
+import com.github.wesjd.overcastmappacker.mc.XMLWorldHandler;
 import com.github.wesjd.overcastmappacker.mc.command.XMLCommand;
 import com.github.wesjd.overcastmappacker.util.ContinuingMap;
 import com.github.wesjd.overcastmappacker.xml.DocumentHandler;
@@ -53,6 +54,7 @@ public class OvercastMapPacker extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        XMLWorldHandler.getInstance().getAndRemoveAll().forEach(xmlWorld -> xmlWorld.getHandler().saveDocument());
         instance = null;
     }
 
