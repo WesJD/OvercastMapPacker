@@ -54,7 +54,7 @@ public class MainInventory extends AbstractInventory {
 
     @Override
     public void onClose() {
-        world.setEditor(null);
+        world.nullEditor();
     }
 
 }
