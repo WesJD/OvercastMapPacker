@@ -1,5 +1,5 @@
 # OvercastMapPacker
-**NO, THIS DOES NOT WORK _YET_**
+**NO, YOU CAN'T REALLY USE THIS, _YET_**
 
 Writes map XMLs for Overcast Network maps from in-game GUIs
 

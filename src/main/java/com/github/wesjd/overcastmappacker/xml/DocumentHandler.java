@@ -86,8 +86,6 @@ public class DocumentHandler {
         final Map<String, String> rawAttributeMapping = attributeMapping.getRaw();
         final XMLModule module = XMLModule.of(moduleClass);
 
-        System.out.println("NO PRE MOD " + module.getTag() + "?? " + (document.getElementsByTagName(module.getTag()).getLength() == 0));
-
         ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
         if (parentClass != null) parentModule = (ParentXMLModule) XMLModule.of(parentClass);
         Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(module.getClass()), "Parent module must accept child.");
