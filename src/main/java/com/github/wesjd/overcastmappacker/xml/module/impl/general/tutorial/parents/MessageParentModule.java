@@ -32,6 +32,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class MessageParentModule extends ParentXMLModule {
+
     @Override
     public String getTag() {
         return "message";
@@ -46,4 +47,5 @@ public class MessageParentModule extends ParentXMLModule {
     protected List<Class<? extends XMLModule>> getChildModules() {
         return Arrays.asList(PointModule.class);
     }
+
 }

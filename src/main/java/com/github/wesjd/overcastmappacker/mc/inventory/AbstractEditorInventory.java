@@ -1,6 +1,7 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.util.AbstractInventory;
 import org.bukkit.entity.Player;
 
 /*
@@ -26,15 +27,28 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class WorldInventory extends AbstractEditorInventory {
+public abstract class AbstractEditorInventory extends AbstractInventory {
 
-    public WorldInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 54, "Map Settings");
+    protected final XMLWorld xmlWorld;
+
+    public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name) {
+        this(player, xmlWorld, size, name, false);
+    }
+
+    public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name, boolean manualOpen) {
+        super(player, size, name, true);
+        this.xmlWorld = xmlWorld;
+        if(!manualOpen) open();
     }
 
     @Override
-    public void build() {
+    public void onOpen() {
+        xmlWorld.setEditor(super.player);
+    }
 
+    @Override
+    public void onClose() {
+        xmlWorld.nullEditor();
     }
 
 }

@@ -1,6 +1,10 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
+import com.avaje.ebean.common.BeanList;
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.util.Items;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /*
@@ -26,15 +30,34 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class WorldInventory extends AbstractEditorInventory {
+public class ContributorsInventory extends AbstractEditorInventory {
 
-    public WorldInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 54, "Map Settings");
+    public ContributorsInventory(Player player, XMLWorld xmlWorld) {
+        super(player, xmlWorld, 54, "Authors and Contributors");
     }
 
     @Override
     public void build() {
+        set(0, Items.GO_BACK, new Button() {
+            @Override
+            public void onClick(Player clicker) {
+                new MainInventory(clicker, ContributorsInventory.super.xmlWorld);
+            }
+        });
 
+        //TODO - Get info for the contributor and author modules from user input in chat
+        set(3, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
+            @Override
+            public void onClick(Player clicker) {
+
+            }
+        });
+        set(5, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {
+            @Override
+            public void onClick(Player clicker) {
+
+            }
+        });
     }
 
 }

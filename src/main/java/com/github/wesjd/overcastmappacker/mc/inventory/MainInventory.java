@@ -1,7 +1,6 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
-import com.github.wesjd.overcastmappacker.util.AbstractInventory;
 import com.github.wesjd.overcastmappacker.util.Items;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -32,29 +31,26 @@ import java.util.Arrays;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class MainInventory extends AbstractInventory {
-
-    private final XMLWorld world;
+public class MainInventory extends AbstractEditorInventory {
 
     public MainInventory(Player player, XMLWorld world) {
-        super(player, 54, "XML for \"" + world.getWorld().getName() + "\"", true);
-        this.world = world;
-        open();
+        super(player, world, 54, "XML for \"" + world.getWorld().getName() + "\"");
     }
 
     @Override
     public void build() {
-        set(4, Items.build(ChatColor.GREEN + world.getWorld().getName(), Material.GRASS, Arrays.asList("Click to change main map settings")), new Button() {
+        set(4, Items.build(ChatColor.GREEN + super.xmlWorld.getWorld().getName(), Material.GRASS, Arrays.asList("Click to change main map settings")), new Button() {
             @Override
             public void onClick(Player clicker) {
 
             }
         });
-    }
-
-    @Override
-    public void onClose() {
-        world.nullEditor();
+        set(12, Items.build(ChatColor.YELLOW + "Authors and Contributors", Material.SKULL_ITEM, Arrays.asList("Click to manage the contributors", "of this map")), new Button() {
+            @Override
+            public void onClick(Player clicker) {
+                new ContributorsInventory(clicker, MainInventory.super.xmlWorld);
+            }
+        });
     }
 
 }

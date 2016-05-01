@@ -29,6 +29,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class DimensionModule extends XMLModule {
+
     @Override
     public String getTag() {
         return "dimension";
@@ -38,4 +39,5 @@ public class DimensionModule extends XMLModule {
     protected List<XMLAttribute> getAttributes() {
         return null;
     }
+
 }

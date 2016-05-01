@@ -40,4 +40,5 @@ public class LineModule extends XMLModule {
     protected List<XMLAttribute> getAttributes() {
         return null;
     }
+
 }

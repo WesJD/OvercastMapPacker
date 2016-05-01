@@ -1,7 +1,10 @@
-package com.github.wesjd.overcastmappacker.mc.inventory;
+package com.github.wesjd.overcastmappacker.xml.module.impl.general.tutorial;
 
-import com.github.wesjd.overcastmappacker.mc.XMLWorld;
-import org.bukkit.entity.Player;
+import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
+import com.github.wesjd.overcastmappacker.xml.module.attributes.XMLAttribute;
+
+import java.util.Arrays;
+import java.util.List;
 
 /*
  * The MIT License (MIT)
@@ -26,15 +29,18 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class WorldInventory extends AbstractEditorInventory {
+public class IncludeModule extends XMLModule {
 
-    public WorldInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 54, "Map Settings");
+    @Override
+    public String getTag() {
+        return "include";
     }
 
     @Override
-    public void build() {
-
+    protected List<XMLAttribute> getAttributes() {
+        return Arrays.asList(
+                new XMLAttribute("src", "tutorial.xml", null, true, true)
+        );
     }
 
 }

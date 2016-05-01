@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 public class Items {
 
+    public static final ItemStack GO_BACK = Items.build(ChatColor.GRAY + "Go Back", Material.ARROW);
+
     public static ItemStack build(Material material) {
         return new ItemStack(material);
     }

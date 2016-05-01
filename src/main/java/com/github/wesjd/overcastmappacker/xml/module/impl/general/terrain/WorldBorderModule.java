@@ -29,6 +29,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class WorldBorderModule extends XMLModule {
+
     @Override
     public String getTag() {
         return "world-border";
@@ -38,4 +39,5 @@ public class WorldBorderModule extends XMLModule {
     protected List<XMLAttribute> getAttributes() {
         return null;
     }
+
 }

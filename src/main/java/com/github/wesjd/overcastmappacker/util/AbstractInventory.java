@@ -46,7 +46,7 @@ public abstract class AbstractInventory {
     private final Listeners listeners = new Listeners();
 
     private final Inventory inventory;
-    private final Player player;
+    protected final Player player;
 
     public AbstractInventory(Player player, int size, String name) {
         this(player, size, name, false);
@@ -62,8 +62,10 @@ public abstract class AbstractInventory {
     public void open() {
         build();
         player.openInventory(inventory);
+        onOpen();
     }
 
+    public void onOpen() {}
     public void onClose() {}
 
     public abstract void build();

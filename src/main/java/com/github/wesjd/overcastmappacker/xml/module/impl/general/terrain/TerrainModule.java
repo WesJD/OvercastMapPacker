@@ -30,6 +30,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class TerrainModule extends XMLModule {
+
     @Override
     public String getTag() {
         return "terrain";
@@ -37,6 +38,10 @@ public class TerrainModule extends XMLModule {
 
     @Override
     protected List<XMLAttribute> getAttributes() {
-        return Arrays.asList(new XMLAttribute("world", "/", null, true, true),new XMLAttribute("vanilla", "true", null, true, true),new XMLAttribute("seed", "", null, false, true));
+        return Arrays.asList(
+                new XMLAttribute("world", "/", null, true, true),
+                new XMLAttribute("vanilla", "true", null, true, true),
+                new XMLAttribute("seed", "", null, false, true)
+        );
     }
 }

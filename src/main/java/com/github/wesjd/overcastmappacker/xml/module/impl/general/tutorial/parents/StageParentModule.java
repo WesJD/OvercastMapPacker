@@ -31,6 +31,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class StageParentModule extends ParentXMLModule {
+
     @Override
     public String getTag() {
         return "stage";
@@ -47,4 +48,5 @@ public class StageParentModule extends ParentXMLModule {
     protected List<Class<? extends XMLModule>> getChildModules() {
         return Arrays.asList(MessageParentModule.class);
     }
+
 }

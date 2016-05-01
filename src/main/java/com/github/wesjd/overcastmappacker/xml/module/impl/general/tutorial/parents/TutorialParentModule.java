@@ -33,6 +33,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class TutorialParentModule extends ParentXMLModule {
+
     @Override
     protected List<Class<? extends XMLModule>> getChildModules() {
         return Arrays.asList(StageParentModule.class);
@@ -47,4 +48,5 @@ public class TutorialParentModule extends ParentXMLModule {
     protected List<XMLAttribute> getAttributes() {
         return null;
     }
+
 }

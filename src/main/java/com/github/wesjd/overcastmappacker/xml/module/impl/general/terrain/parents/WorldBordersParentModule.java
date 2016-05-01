@@ -30,6 +30,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class WorldBordersParentModule extends ParentXMLModule {
+
     @Override
     protected List<Class<? extends XMLModule>> getChildModules() {
         return null;
@@ -44,4 +45,5 @@ public class WorldBordersParentModule extends ParentXMLModule {
     protected List<XMLAttribute> getAttributes() {
         return null;
     }
+
 }

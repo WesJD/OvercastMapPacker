@@ -32,6 +32,7 @@ import java.util.List;
  * SOFTWARE.
  */
 public class TeleportParentModule extends ParentXMLModule {
+
     @Override
     protected List<Class<? extends XMLModule>> getChildModules() {
         return Arrays.asList(PointModule.class);
@@ -46,4 +47,5 @@ public class TeleportParentModule extends ParentXMLModule {
     protected List<XMLAttribute> getAttributes() {
         return null;
     }
+
 }
