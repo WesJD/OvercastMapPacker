@@ -1,6 +1,5 @@
-package com.github.wesjd.overcastmappacker.xml.module.impl.general.tutorial.parents;
+package com.github.wesjd.overcastmappacker.xml.module.impl.filters;
 
-import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.attributes.XMLAttribute;
 
@@ -30,21 +29,14 @@ import java.util.List;
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
  */
-public class StageParentModule extends ParentXMLModule {
+public class PointModule extends XMLModule {
     @Override
     public String getTag() {
-        return "stage";
+        return null;
     }
 
     @Override
     protected List<XMLAttribute> getAttributes() {
-        return Arrays.asList(
-                new XMLAttribute("title", "Capture The Wool", null, true, true)
-        );
-    }
-
-    @Override
-    protected List<Class<? extends XMLModule>> getChildModules() {
-        return Arrays.asList(MessageParentModule.class);
+        return Arrays.asList(new XMLAttribute("yaw", "90", null, true, true),new XMLAttribute("pitch", "50", null, true, true),new XMLAttribute("angle", "0", null, true, true));
     }
 }
