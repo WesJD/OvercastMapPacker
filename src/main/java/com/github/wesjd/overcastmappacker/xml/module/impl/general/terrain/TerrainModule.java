@@ -1,10 +1,7 @@
-package com.github.wesjd.overcastmappacker.xml.module.impl.general.tutorial.parents;
+package com.github.wesjd.overcastmappacker.xml.module.impl.general.terrain;
 
-
-import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.attributes.XMLAttribute;
-import com.github.wesjd.overcastmappacker.xml.module.impl.general.tutorial.parents.StageParentModule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,19 +29,14 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class TutorialParentModule extends ParentXMLModule {
-    @Override
-    protected List<Class<? extends XMLModule>> getChildModules() {
-        return Arrays.asList(StageParentModule.class);
-    }
-
+public class TerrainModule extends XMLModule {
     @Override
     public String getTag() {
-        return "tutorial";
+        return "terrain";
     }
 
     @Override
     protected List<XMLAttribute> getAttributes() {
-        return null;
+        return Arrays.asList(new XMLAttribute("world", "/", null, true, true),new XMLAttribute("vanilla", "true", null, true, true),new XMLAttribute("seed", "", null, false, true));
     }
 }
