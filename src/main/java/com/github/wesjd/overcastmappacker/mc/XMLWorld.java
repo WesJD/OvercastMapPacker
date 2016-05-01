@@ -40,6 +40,10 @@ public class XMLWorld {
         this.handler = handler;
     }
 
+    public void nullEditor(){
+        this.editor = null;
+    }
+
     public void setEditor(Player newEditor) {
         if(this.editor == null) {
             this.editor = newEditor;
