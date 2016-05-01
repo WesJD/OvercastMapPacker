@@ -40,6 +40,7 @@ public class OvercastMapPacker {
     public static void main(String[] args) {
         final DocumentHandler handler = DocumentHandler.createNewXMLFile(new File("C:/Users/Wesley Smith/Desktop", "test.xml"));
         handler.set(null, NameModule.class, "A Test Map");
+        handler.set(null, NameModule.class, "HI I CHANGED PROPERLY");
         handler.set(null, VersionModule.class, "1.0.0");
         handler.set(null, ObjectiveModule.class, "A description.");
         handler.set(ContributorsParentModule.class, ContributorModule.class, "A contributor.", ContinuingMap.from("contribution", "Helping.").add("uuid", "a-u-u-i-d"));

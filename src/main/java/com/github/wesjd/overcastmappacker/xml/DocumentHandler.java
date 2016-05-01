@@ -18,9 +18,6 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,9 +47,6 @@ import java.util.Map;
  * SOFTWARE.
  */
 public class DocumentHandler {
-
-    private final XPath xPath = XMLConstants.X_PATH_FACTORY.newXPath();
-    private final Expressions expressions = new Expressions(this);
 
     private File documentFile;
     private DocumentBuilder documentBuilder;
@@ -88,54 +82,40 @@ public class DocumentHandler {
         set(parent, moduleClass, moduleValue, ContinuingMap.empty());
     }
 
-    public void set(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, String moduleValue, ContinuingMap<String, String> attributeMapping) {
-        System.out.println("SET par " + parent + " AND mod " + moduleClass);
-        try {
-            final Map<String, String> rawAttributeMapping = attributeMapping.getRaw();
-            final XMLModule module = XMLModule.of(moduleClass);
+    public void set(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass, String moduleValue, ContinuingMap<String, String> attributeMapping) {
+        final Map<String, String> rawAttributeMapping = attributeMapping.getRaw();
+        final XMLModule module = XMLModule.of(moduleClass);
 
-            System.out.println("NO PRE MOD " + module.getTag() + "?? " + (document.getElementsByTagName(module.getTag()).getLength() == 0));
+        System.out.println("NO PRE MOD " + module.getTag() + "?? " + (document.getElementsByTagName(module.getTag()).getLength() == 0));
 
-            ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
-            if (parent != null) parentModule = (ParentXMLModule) XMLModule.of(parent);
-            Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(module.getClass()), "Parent module must accept child.");
+        ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
+        if (parentClass != null) parentModule = (ParentXMLModule) XMLModule.of(parentClass);
+        Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(module.getClass()), "Parent module must accept child.");
 
-            Element moduleElement = (Element) expressions.getExpression(module.getTag()).evaluate(document, XPathConstants.NODE);
-            if (moduleElement != null) {
-                moduleElement.setTextContent(moduleValue);
-            } else {
-                moduleElement = document.createElement(module.getTag());
-                moduleElement.setTextContent(moduleValue);
+        Element moduleElement = (Element) document.getElementsByTagName(module.getTag()).item(0);
+        if (moduleElement == null) {
+            moduleElement = document.createElement(module.getTag());
 
-                final XPathExpression expression = expressions.getExpression("(" + parentModule.getTag() + ")[1]");
-                Node parentNode = (Node) expression.evaluate(document, XPathConstants.NODE);
-                if (parentNode == null) {
-                    System.out.println((parentNode == null) + "VAL");
-                    set(null, parentModule.getClass());
-                    System.out.println("FROM " + parentModule.getTag() + ": " + document.getElementsByTagName(parentModule.getTag()).getLength());
-                    parentNode = (Node) expression.evaluate(document, XPathConstants.NODE);
-                }
-                System.out.println((parentNode == null) + "VAL2");
-                parentNode.appendChild(moduleElement);
+            Node parentNode = document.getElementsByTagName(parentModule.getTag()).item(0);
+            if (parentNode == null) {
+                set(null, parentModule.getClass());
+                parentNode = document.getElementsByTagName(parentModule.getTag()).item(0);
             }
+            parentNode.appendChild(moduleElement);
+        }
+        moduleElement.setTextContent(moduleValue);
 
-            if (module.getXMLAttributes() != null) {
-                final Element finalModuleElement = moduleElement;
-                module.getXMLAttributes().forEach(xmlAttribute -> {
-                    final String attributeName = xmlAttribute.getName();
+        if (module.getXMLAttributes() != null) {
+            final Element finalModuleElement = moduleElement;
+            module.getXMLAttributes().forEach(xmlAttribute -> {
+                final String attributeName = xmlAttribute.getName();
 
-                    String value = rawAttributeMapping.containsKey(attributeName) ? rawAttributeMapping.get(attributeName) : xmlAttribute.getDefaultValue();
-                    if ((xmlAttribute.getValidValues() == null || !xmlAttribute.getValidValues().contains(value)) && xmlAttribute.isRequired())
-                        value = xmlAttribute.getDefaultValue();
+                String value = rawAttributeMapping.containsKey(attributeName) ? rawAttributeMapping.get(attributeName) : xmlAttribute.getDefaultValue();
+                if ((xmlAttribute.getValidValues() == null || !xmlAttribute.getValidValues().contains(value)) && xmlAttribute.isRequired())
+                    value = xmlAttribute.getDefaultValue();
 
-                    finalModuleElement.setAttribute(attributeName, value);
-                });
-            }
-
-            System.out.println("POST MOD " + module.getTag() + "?? " + (document.getElementsByTagName(module.getTag()).getLength() > 0));
-            System.out.println("--------------------------- for " + module.getTag());
-        } catch (XPathExpressionException e) {
-            e.printStackTrace();
+                finalModuleElement.setAttribute(attributeName, value);
+            });
         }
     }
 
@@ -148,10 +128,6 @@ public class DocumentHandler {
         } catch (TransformerException | IOException | SAXException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public XPath getLocalXPath() {
-        return xPath;
     }
 
     public File getDocumentFile() {

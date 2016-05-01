@@ -41,8 +41,6 @@ class XMLConstants {
 
     public static final DocumentBuilderFactory DOCUMENT_BUILDER_FACTORY = DocumentBuilderFactory.newInstance();
 
-    public static final XPathFactory X_PATH_FACTORY = XPathFactory.newInstance();
-
     public static final TransformerFactory TRANSFORMER_FACTORY = TransformerFactory.newInstance();
 
     public static final OutputFormat INDENTED_OUTPUT_FORMAT = new OutputFormat();
