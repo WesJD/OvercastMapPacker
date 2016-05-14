@@ -137,8 +137,10 @@ public class DocumentHandler {
 
     public static DocumentHandler createNewXMLFile(File file) {
         try {
-            if (!file.exists() && !file.createNewFile()) throw new RuntimeException("Unable to create new XML file.");
-            Files.write(Paths.get(file.getAbsolutePath()), XMLConstants.DEFAULT_LINES);
+            if (!file.exists()) {
+                if(!file.createNewFile()) throw new RuntimeException("Unable to create new XML file.");
+                Files.write(Paths.get(file.getAbsolutePath()), XMLConstants.DEFAULT_LINES);
+            }
             return new DocumentHandler(file);
         } catch (IOException e) {
             throw new RuntimeException(e);

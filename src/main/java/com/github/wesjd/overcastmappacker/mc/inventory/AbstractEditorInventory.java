@@ -2,6 +2,7 @@ package com.github.wesjd.overcastmappacker.mc.inventory;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
 import com.github.wesjd.overcastmappacker.util.AbstractInventory;
+import com.github.wesjd.overcastmappacker.xml.DocumentHandler;
 import org.bukkit.entity.Player;
 
 /*
@@ -30,6 +31,7 @@ import org.bukkit.entity.Player;
 public abstract class AbstractEditorInventory extends AbstractInventory {
 
     protected final XMLWorld xmlWorld;
+    protected final DocumentHandler documentHandler;
 
     public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name) {
         this(player, xmlWorld, size, name, false);
@@ -38,6 +40,7 @@ public abstract class AbstractEditorInventory extends AbstractInventory {
     public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name, boolean manualOpen) {
         super(player, size, name, true);
         this.xmlWorld = xmlWorld;
+        this.documentHandler = xmlWorld.getHandler();
         if(!manualOpen) open();
     }
 

@@ -4,6 +4,7 @@ import com.github.wesjd.overcastmappacker.mc.XMLWorld;
 import com.github.wesjd.overcastmappacker.util.Items;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -42,13 +43,22 @@ public class MainInventory extends AbstractEditorInventory {
         set(4, Items.build(ChatColor.GREEN + super.xmlWorld.getWorld().getName(), Material.GRASS, Arrays.asList("Click to change main map settings")), new Button() {
             @Override
             public void onClick(Player clicker) {
-
+                new WorldInventory(clicker, MainInventory.super.xmlWorld);
             }
         });
+
         set(12, Items.build(ChatColor.YELLOW + "Authors and Contributors", Material.SKULL_ITEM, Arrays.asList("Click to manage the contributors", "of this map")), new Button() {
             @Override
             public void onClick(Player clicker) {
                 new ContributorsInventory(clicker, MainInventory.super.xmlWorld);
+            }
+        });
+
+        set(45, Items.build(ChatColor.YELLOW + "Save XML", Material.ANVIL, Arrays.asList("Save the map.xml")), new Button() {
+            @Override
+            public void onClick(Player clicker) {
+                MainInventory.super.documentHandler.saveDocument();
+                clicker.playSound(clicker.getLocation(), Sound.BLOCK_ANVIL_USE, 1F, 1F);
             }
         });
     }

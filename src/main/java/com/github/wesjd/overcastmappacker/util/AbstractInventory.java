@@ -79,12 +79,17 @@ public abstract class AbstractInventory {
         if (!manualOpen) open();
     }
 
-    public void open() {
+    protected void open() {
         build();
         handleOpenInventoryClosing();
         player.openInventory(inventory);
         Bukkit.getPluginManager().registerEvents(listeners, OvercastMapPacker.getInstance());
         onOpen();
+    }
+
+    protected void close() {
+        onClose();
+        HandlerList.unregisterAll(listeners);
     }
 
     protected void handleOpenInventoryClosing() {
@@ -138,12 +143,7 @@ public abstract class AbstractInventory {
 
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent e) {
-            Bukkit.broadcastMessage(inventory.getName() + "close");
-            if (e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
-                Bukkit.broadcastMessage(inventory.getName() + "close2");
-                onClose();
-                HandlerList.unregisterAll(listeners);
-            }
+            if (e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) close();
         }
 
     }
