@@ -9,7 +9,7 @@
     <version>0.1.4</version>
 
     <properties>
-        <version>${version}</version>
+        <version>${project.version}</version>
     </properties>
 
     <repositories>
