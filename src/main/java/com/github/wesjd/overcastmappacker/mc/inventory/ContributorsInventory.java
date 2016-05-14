@@ -1,11 +1,16 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
-import com.avaje.ebean.common.BeanList;
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.util.InputAnvil;
 import com.github.wesjd.overcastmappacker.util.Items;
+import com.github.wesjd.overcastmappacker.util.YesNoInventory;
+import net.buildstatic.util.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Arrays;
 
 /*
  * The MIT License (MIT)
@@ -45,11 +50,29 @@ public class ContributorsInventory extends AbstractEditorInventory {
             }
         });
 
-        //TODO - Get info for the contributor and author modules from user input in chat
         set(3, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
             @Override
             public void onClick(Player clicker) {
+                final String[] name = new String[2];
+                new YesNoInventory(clicker, Items.build("Do they have an account?", Material.GRASS, Arrays.asList("Does this person own a", "Minecraft account?"))) {
+                    @Override
+                    public void onYes(Player decider) {
+                        decider.sendMessage("yup thx");
+                        new InputAnvil(decider, "What is their in IGN?", new AnvilGUI.ClickHandler() {
+                            @Override
+                            public String onClick(Player player, String input) {
+                                player.sendMessage("thx for " + input);
+                                name[1] = input;
+                                return input; //to go to next inventory without flicker
+                            }
+                        });
+                    }
 
+                    @Override
+                    public void onNo(Player decider) {
+                        decider.sendMessage("you said no");
+                    }
+                };
             }
         });
         set(5, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {

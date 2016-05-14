@@ -44,11 +44,12 @@ public class XMLWorld {
         this.editor = null;
     }
 
-    public void setEditor(Player newEditor) {
+    public boolean setEditor(Player newEditor) {
         if(this.editor == null) {
             this.editor = newEditor;
-            new MainInventory(newEditor, this);
+            return true;
         } else newEditor.sendMessage(ChatColor.RED + editor.getName() + " is currently editing the XML for this map!");
+        return false;
     }
 
     public World getWorld() {

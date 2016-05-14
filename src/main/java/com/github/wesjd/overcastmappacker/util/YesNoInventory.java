@@ -1,8 +1,9 @@
-package com.github.wesjd.overcastmappacker.mc.inventory;
+package com.github.wesjd.overcastmappacker.util;
 
-import com.github.wesjd.overcastmappacker.mc.XMLWorld;
-import com.github.wesjd.overcastmappacker.util.AbstractInventory;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /*
  * The MIT License (MIT)
@@ -27,29 +28,34 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public abstract class AbstractEditorInventory extends AbstractInventory {
+public abstract class YesNoInventory extends AbstractInventory {
 
-    protected final XMLWorld xmlWorld;
+    private final ItemStack icon;
 
-    public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name) {
-        this(player, xmlWorld, size, name, false);
-    }
-
-    public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name, boolean manualOpen) {
-        super(player, size, name, true);
-        this.xmlWorld = xmlWorld;
-        if(!manualOpen) open();
+    public YesNoInventory(Player player, ItemStack icon) {
+        super(player, 27, "Yes or No?", true);
+        this.icon = icon;
+        open();
     }
 
     @Override
-    public void open() {
-        handleOpenInventoryClosing();
-        if(xmlWorld.setEditor(super.player)) super.open();
+    public void build() {
+        set(13, icon);
+        set(11, Items.build(ChatColor.GREEN + "Yes", Material.STAINED_CLAY, (short) 5), new Button() {
+            @Override
+            public void onClick(Player clicker) {
+                onYes(clicker);
+            }
+        });
+        set(15, Items.build(ChatColor.RED + "No", Material.STAINED_CLAY, (short) 14), new Button() {
+            @Override
+            public void onClick(Player clicker) {
+                onNo(clicker);
+            }
+        });
     }
 
-    @Override
-    public void onClose() {
-        xmlWorld.nullEditor();
-    }
+    public abstract void onYes(Player decider);
+    public abstract void onNo(Player decider);
 
 }

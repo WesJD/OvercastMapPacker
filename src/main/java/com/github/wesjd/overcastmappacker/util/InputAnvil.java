@@ -1,8 +1,9 @@
-package com.github.wesjd.overcastmappacker.mc.inventory;
+package com.github.wesjd.overcastmappacker.util;
 
-import com.github.wesjd.overcastmappacker.mc.XMLWorld;
-import com.github.wesjd.overcastmappacker.util.AbstractInventory;
+import com.github.wesjd.overcastmappacker.OvercastMapPacker;
+import net.buildstatic.util.anvilgui.AnvilGUI;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 /*
  * The MIT License (MIT)
@@ -27,29 +28,10 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public abstract class AbstractEditorInventory extends AbstractInventory {
+public class InputAnvil extends AnvilGUI {
 
-    protected final XMLWorld xmlWorld;
-
-    public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name) {
-        this(player, xmlWorld, size, name, false);
-    }
-
-    public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name, boolean manualOpen) {
-        super(player, size, name, true);
-        this.xmlWorld = xmlWorld;
-        if(!manualOpen) open();
-    }
-
-    @Override
-    public void open() {
-        handleOpenInventoryClosing();
-        if(xmlWorld.setEditor(super.player)) super.open();
-    }
-
-    @Override
-    public void onClose() {
-        xmlWorld.nullEditor();
+    public InputAnvil(Player holder, String insert, ClickHandler clickHandler) {
+        super(OvercastMapPacker.getInstance(), holder, insert, clickHandler);
     }
 
 }

@@ -9,11 +9,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,26 @@ import java.util.Map;
  */
 public abstract class AbstractInventory {
 
+    private static final String SERVER_VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+
+    private static Method handleInventoryCloseEvent;
+    private static Method getHandle;
+    private static Field defaultContainer;
+    private static Field activeContainer;
+
+    static {
+        try {
+            final Class<?> entityHuman = Class.forName("net.minecraft.server." + SERVER_VERSION + ".EntityHuman");
+            handleInventoryCloseEvent = Class.forName("org.bukkit.craftbukkit." + SERVER_VERSION + ".event.CraftEventFactory")
+                    .getDeclaredMethod("handleInventoryCloseEvent", entityHuman);
+            getHandle = Class.forName("org.bukkit.craftbukkit." + SERVER_VERSION + ".entity.CraftPlayer").getDeclaredMethod("getHandle");
+            defaultContainer = entityHuman.getDeclaredField("defaultContainer");
+            activeContainer = entityHuman.getDeclaredField("activeContainer");
+        } catch (ClassNotFoundException | NoSuchMethodException | NoSuchFieldException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private final Map<Integer, Button> buttons = new HashMap<>();
     private final Listeners listeners = new Listeners();
 
@@ -55,18 +76,32 @@ public abstract class AbstractInventory {
     public AbstractInventory(Player player, int size, String name, boolean manualOpen) {
         this.inventory = Bukkit.createInventory(player, size, name);
         this.player = player;
-        if(!manualOpen) open();
-        Bukkit.getPluginManager().registerEvents(listeners, OvercastMapPacker.getInstance());
+        if (!manualOpen) open();
     }
 
     public void open() {
         build();
+        handleOpenInventoryClosing();
         player.openInventory(inventory);
+        Bukkit.getPluginManager().registerEvents(listeners, OvercastMapPacker.getInstance());
         onOpen();
     }
 
-    public void onOpen() {}
-    public void onClose() {}
+    protected void handleOpenInventoryClosing() {
+        try {
+            final Object entityHuman = getHandle.invoke(player);
+            handleInventoryCloseEvent.invoke(null, entityHuman);
+            activeContainer.set(entityHuman, defaultContainer.get(entityHuman));
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void onOpen() {
+    }
+
+    public void onClose() {
+    }
 
     public abstract void build();
 
@@ -94,15 +129,18 @@ public abstract class AbstractInventory {
 
         @EventHandler
         public void onInventoryClick(InventoryClickEvent e) {
-            if(e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
+            if (e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
                 e.setCancelled(true);
-                if(buttons.containsKey(e.getRawSlot())) buttons.get(e.getRawSlot()).onClick((Player) e.getWhoClicked());
+                if (buttons.containsKey(e.getRawSlot()))
+                    buttons.get(e.getRawSlot()).onClick((Player) e.getWhoClicked());
             }
         }
 
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent e) {
-            if(e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
+            Bukkit.broadcastMessage(inventory.getName() + "close");
+            if (e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
+                Bukkit.broadcastMessage(inventory.getName() + "close2");
                 onClose();
                 HandlerList.unregisterAll(listeners);
             }
