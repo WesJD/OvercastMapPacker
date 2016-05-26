@@ -3,10 +3,12 @@ package com.github.wesjd.overcastmappacker.util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,10 @@ public class Items {
                 .collect(Collectors.toList()));
         stack.setItemMeta(meta);
         return stack;
+    }
+
+    public static void addEnchantments(ItemStack stack, Enchantment... enchantments) {
+        Arrays.stream(enchantments).forEach(enchantment -> stack.addUnsafeEnchantment(enchantment, 1));
     }
 
     public static ItemStack buildHead(String owner) {

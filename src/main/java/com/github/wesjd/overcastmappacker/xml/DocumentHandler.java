@@ -9,6 +9,7 @@ import org.apache.xml.serialize.XMLSerializer;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -20,6 +21,8 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -114,6 +117,18 @@ public class DocumentHandler {
                 finalModuleElement.setAttribute(attributeName, value);
             });
         }
+    }
+
+    public List<Element> get(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass) {
+        final List<Element> ret = new ArrayList<>();
+
+        final Element parentElement = (Element) document.getElementsByTagName(XMLModule.of(parentClass).getTag()).item(0);
+        if(parentElement != null) {
+            final NodeList nodeList = parentElement.getElementsByTagName(XMLModule.of(moduleClass).getTag());
+            for (int i = 0; i < nodeList.getLength(); i++) ret.add((Element) nodeList.item(i));
+        }
+
+        return ret;
     }
 
     public void saveDocument() {
