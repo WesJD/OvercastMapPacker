@@ -38,7 +38,7 @@ import java.io.File;
  */
 public class OvercastMapPacker extends JavaPlugin {
 
-    public static final String MAP_PROTOCOL_NUMBER = "1.4.0";
+    public static final String MAP_PROTOCOL_NUMBER = "1.4.1";
 
     private static OvercastMapPacker instance;
 
