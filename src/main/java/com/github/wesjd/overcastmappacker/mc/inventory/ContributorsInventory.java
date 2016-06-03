@@ -1,9 +1,9 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
-import com.github.wesjd.overcastmappacker.util.InputAnvil;
-import com.github.wesjd.overcastmappacker.util.Items;
-import com.github.wesjd.overcastmappacker.util.YesNoInventory;
+import com.github.wesjd.overcastmappacker.util.*;
+import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.ContributorModule;
+import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.parents.ContributorsParentModule;
 import net.buildstatic.util.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 /*
  * The MIT License (MIT)
@@ -53,17 +54,21 @@ public class ContributorsInventory extends AbstractEditorInventory {
         set(3, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
             @Override
             public void onClick(Player clicker) {
-                final String[] name = new String[2];
+                final String[] name = new String[2]; //0 = uuid, 1 = name
                 new YesNoInventory(clicker, Items.build("Do they have an account?", Material.GRASS, Arrays.asList("Does this person own a", "Minecraft account?"))) {
                     @Override
                     public void onYes(Player decider) {
-                        decider.sendMessage("yup thx");
-                        new InputAnvil(decider, "What is their in IGN?", new AnvilGUI.ClickHandler() {
+                        new InputAnvil(decider, "Their ingame name?", new AnvilGUI.ClickHandler() {
                             @Override
                             public String onClick(Player player, String input) {
-                                player.sendMessage("thx for " + input);
-                                name[1] = input;
-                                return input; //to go to next inventory without flicker
+                                try {
+                                    final UUID uuid = UUIDFetcher.getUUIDOf(input);
+                                    if(uuid != null) name[0] = uuid.toString();
+                                    else return ChatColor.RED + "Not a valid name.";
+                                } catch (Exception ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                                return input; //no flicker
                             }
                         });
                     }
@@ -73,14 +78,31 @@ public class ContributorsInventory extends AbstractEditorInventory {
                         decider.sendMessage("you said no");
                     }
                 };
+
+
+                new InputAnvil(clicker, "Their contribution?", new AnvilGUI.ClickHandler() {
+                    @Override
+                    public String onClick(Player player, String contribution) {
+                        if(name[0] != null) ContributorsInventory.super.documentHandler.set(ContributorsParentModule.class, ContributorModule.class,
+                                    ContinuingMap.from("uuid", name[0]).add("contribution", contribution));
+                        else ContributorsInventory.super.documentHandler.set(ContributorsParentModule.class, ContributorModule.class, name[1],
+                                    ContinuingMap.from("contribution", contribution));
+
+                        new ContributorsInventory(player, ContributorsInventory.super.xmlWorld);
+                        return contribution; //no flicker
+                    }
+                });
             }
         });
+
         set(5, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {
             @Override
             public void onClick(Player clicker) {
 
             }
         });
+
+        //TODO - Show all contributors
     }
 
 }

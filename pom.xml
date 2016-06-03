@@ -6,7 +6,7 @@
 
     <groupId>com.github.wesjd</groupId>
     <artifactId>overcast-map-packer</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
 
     <properties>
         <version>${project.version}</version>
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>net.buildstatic.util</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
