@@ -122,7 +122,11 @@ public class DocumentHandler {
     public List<Element> get(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass) {
         final List<Element> ret = new ArrayList<>();
 
-        final Element parentElement = (Element) document.getElementsByTagName(XMLModule.of(parentClass).getTag()).item(0);
+        ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
+        if(parentClass != null) parentModule = (ParentXMLModule) XMLModule.of(parentClass);
+        Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(moduleClass), "Parent module must accept child.");
+
+        final Element parentElement = (Element) document.getElementsByTagName(parentModule.getTag()).item(0);
         if(parentElement != null) {
             final NodeList nodeList = parentElement.getElementsByTagName(XMLModule.of(moduleClass).getTag());
             for (int i = 0; i < nodeList.getLength(); i++) ret.add((Element) nodeList.item(i));

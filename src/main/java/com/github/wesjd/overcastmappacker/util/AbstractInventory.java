@@ -136,8 +136,7 @@ public abstract class AbstractInventory {
         public void onInventoryClick(InventoryClickEvent e) {
             if (e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
                 e.setCancelled(true);
-                if (buttons.containsKey(e.getRawSlot()))
-                    buttons.get(e.getRawSlot()).onClick((Player) e.getWhoClicked());
+                if (buttons.containsKey(e.getRawSlot())) buttons.get(e.getRawSlot()).onClick((Player) e.getWhoClicked());
             }
         }
 
