@@ -4,6 +4,7 @@ import com.github.wesjd.overcastmappacker.OvercastMapPacker;
 import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.attributes.XMLAttribute;
+import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.VersionModule;
 import org.apache.xml.serialize.OutputFormat;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,7 +44,7 @@ class XMLConstants {
     public static final OutputFormat INDENTED_OUTPUT_FORMAT = new OutputFormat();
     static {
         INDENTED_OUTPUT_FORMAT.setIndenting(true);
-        INDENTED_OUTPUT_FORMAT.setIndent(2);
+        INDENTED_OUTPUT_FORMAT.setIndent(4);
     }
 
     public static final ParentXMLModule MAIN_BODY_MODULE = new ParentXMLModule() {
@@ -65,6 +66,15 @@ class XMLConstants {
         }
     };
 
-    public static final List<String> DEFAULT_LINES = Arrays.asList("<map proto=\"" + OvercastMapPacker.MAP_PROTOCOL_NUMBER + "\">", "</map>");
+    //yes, this is a little hacky
+    public static final List<String> DEFAULT_LINES = Arrays.asList(
+            "<map proto=\"" + OvercastMapPacker.MAP_PROTOCOL_NUMBER + "\">",
+            "  <name>Unknown Name</name>",
+            "  <version>1.0.0</version>",
+            "  <objective>Unknown Objective</objective>",
+            "  <authors/>",
+            "  <contributors/>",
+            "</map>"
+    );
 
 }
