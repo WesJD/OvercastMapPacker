@@ -69,11 +69,11 @@ class XMLConstants {
     //yes, this is a little hacky
     public static final List<String> DEFAULT_LINES = Arrays.asList(
             "<map proto=\"" + OvercastMapPacker.MAP_PROTOCOL_NUMBER + "\">",
-            "  <name>Unknown Name</name>",
-            "  <version>1.0.0</version>",
-            "  <objective>Unknown Objective</objective>",
-            "  <authors/>",
-            "  <contributors/>",
+            "    <name>Unknown Name</name>",
+            "    <version>1.0.0</version>",
+            "    <objective>Unknown Objective</objective>",
+            "    <authors/>",
+            "    <contributors/>",
             "</map>"
     );
 
