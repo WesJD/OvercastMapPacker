@@ -121,7 +121,7 @@ public class WorldInventory extends AbstractEditorInventory {
 
             final ItemStack standardItem = Items.build(ChatColor.GREEN + "Standard", Material.IRON_AXE);
             final ItemStack rankedItem = Items.build(ChatColor.GREEN + "Ranked", Material.IRON_SWORD);
-            final ItemStack tournamentItem = Items.build(ChatColor.GREEN + "Tournament", Material.STANDING_BANNER);
+            final ItemStack tournamentItem = Items.build(ChatColor.GREEN + "Tournament", Material.BANNER);
 
             switch (value) {
                 case "standard":
