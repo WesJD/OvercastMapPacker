@@ -3,7 +3,6 @@ package com.github.wesjd.overcastmappacker.xml;
 import com.github.wesjd.overcastmappacker.util.ContinuingMap;
 import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
-import javafx.scene.Parent;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.xml.serialize.XMLSerializer;

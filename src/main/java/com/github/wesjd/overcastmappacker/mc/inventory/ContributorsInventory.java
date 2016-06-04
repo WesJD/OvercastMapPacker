@@ -54,7 +54,6 @@ public class ContributorsInventory extends AbstractEditorInventory {
         set(3, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
             @Override
             public void onClick(Player clicker) {
-                final String[] name = new String[2]; //0 = uuid, 1 = name
                 new YesNoInventory(clicker, Items.build("Do they have an account?", Material.GRASS, Arrays.asList("Does this person own a", "Minecraft account?"))) {
                     @Override
                     public void onYes(Player decider) {
