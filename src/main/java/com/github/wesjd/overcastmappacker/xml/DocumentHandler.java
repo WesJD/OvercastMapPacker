@@ -3,6 +3,7 @@ package com.github.wesjd.overcastmappacker.xml;
 import com.github.wesjd.overcastmappacker.util.ContinuingMap;
 import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
+import javafx.scene.Parent;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.xml.serialize.XMLSerializer;
@@ -85,46 +86,48 @@ public class DocumentHandler {
     }
 
     public void set(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass, String moduleValue, ContinuingMap<String, String> attributeMapping) {
-        final Map<String, String> rawAttributeMapping = attributeMapping.getRaw();
         final XMLModule module = XMLModule.of(moduleClass);
+        final Element moduleElement = (Element) document.getElementsByTagName(module.getTag()).item(0);
 
-        ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
-        if (parentClass != null) parentModule = (ParentXMLModule) XMLModule.of(parentClass);
-        Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(module.getClass()), "Parent module must accept child.");
-
-        Element moduleElement = (Element) document.getElementsByTagName(module.getTag()).item(0);
-        if (moduleElement == null) {
-            moduleElement = document.createElement(module.getTag());
-
-            Node parentNode = document.getElementsByTagName(parentModule.getTag()).item(0);
-            if (parentNode == null) {
-                set(null, parentModule.getClass());
-                parentNode = document.getElementsByTagName(parentModule.getTag()).item(0);
-            }
-            parentNode.appendChild(moduleElement);
-        }
-        moduleElement.setTextContent(moduleValue);
-
-        if (module.getXMLAttributes() != null) {
-            final Element finalModuleElement = moduleElement;
-            module.getXMLAttributes().forEach(xmlAttribute -> {
-                final String attributeName = xmlAttribute.getName();
-
-                String value = rawAttributeMapping.containsKey(attributeName) ? rawAttributeMapping.get(attributeName) : xmlAttribute.getDefaultValue();
-                if ((xmlAttribute.getValidValues() == null || !xmlAttribute.getValidValues().contains(value)) && xmlAttribute.isRequired())
-                    value = xmlAttribute.getDefaultValue();
-
-                finalModuleElement.setAttribute(attributeName, value);
-            });
+        if (moduleElement == null) add(parentClass, moduleClass, moduleValue, attributeMapping);
+        else {
+            moduleElement.setTextContent(moduleValue);
+            handleAttributes(module, moduleElement, attributeMapping);
         }
     }
 
-    public List<Element> get(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass) {
-        final List<Element> ret = new ArrayList<>();
+    public void add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass) {
+        add(parent, moduleClass, ContinuingMap.empty());
+    }
 
-        ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
-        if(parentClass != null) parentModule = (ParentXMLModule) XMLModule.of(parentClass);
-        Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(moduleClass), "Parent module must accept child.");
+    public void add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, ContinuingMap<String, String> attributeMapping) {
+        add(parent, moduleClass, null, attributeMapping);
+    }
+
+    public void add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, String moduleValue) {
+        add(parent, moduleClass, moduleValue, ContinuingMap.empty());
+    }
+    
+    public void add(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass, String moduleValue, ContinuingMap<String, String> attributeMapping) {
+        final ParentXMLModule parentModule = getParentModule(parentClass, moduleClass);
+        final XMLModule module = XMLModule.of(moduleClass);
+
+        final Element moduleElement = document.createElement(module.getTag());
+        moduleElement.setTextContent(moduleValue);
+
+        Node parentNode = document.getElementsByTagName(parentModule.getTag()).item(0);
+        if (parentNode == null) {
+            set(null, parentModule.getClass());
+            parentNode = document.getElementsByTagName(parentModule.getTag()).item(0);
+        }
+        parentNode.appendChild(moduleElement);
+        
+        handleAttributes(module, moduleElement, attributeMapping);
+    }
+
+    public List<Element> get(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass) {
+        final ParentXMLModule parentModule = getParentModule(parentClass, moduleClass);
+        final List<Element> ret = new ArrayList<>();
 
         final Element parentElement = (Element) document.getElementsByTagName(parentModule.getTag()).item(0);
         if(parentElement != null) {
@@ -133,6 +136,29 @@ public class DocumentHandler {
         }
 
         return ret;
+    }
+
+    private ParentXMLModule getParentModule(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass) {
+        ParentXMLModule parentModule = XMLConstants.MAIN_BODY_MODULE;
+        if(parentClass != null) parentModule = (ParentXMLModule) XMLModule.of(parentClass);
+        Validate.isTrue(parentModule.getChildXMLModules() == null || parentModule.getChildXMLModules().contains(moduleClass), "Parent module must accept child.");
+
+        return parentModule;
+    }
+    
+    private void handleAttributes(XMLModule module, Element element, ContinuingMap<String, String> attributeMapping) {
+        if (module.getXMLAttributes() != null) {
+            module.getXMLAttributes().forEach(xmlAttribute -> {
+                final Map<String, String> rawAttributeMapping = attributeMapping.getRaw();
+                final String attributeName = xmlAttribute.getName();
+
+                String value = rawAttributeMapping.containsKey(attributeName) ? rawAttributeMapping.get(attributeName) : xmlAttribute.getDefaultValue();
+                if (xmlAttribute.isRequired() && xmlAttribute.getValidValues() != null && !xmlAttribute.getValidValues().contains(value))
+                    value = xmlAttribute.getDefaultValue();
+
+                element.setAttribute(attributeName, value);
+            });
+        }
     }
 
     public void saveDocument() {

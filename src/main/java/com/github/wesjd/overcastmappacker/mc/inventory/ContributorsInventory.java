@@ -63,8 +63,10 @@ public class ContributorsInventory extends AbstractEditorInventory {
                             public String onClick(Player player, String input) {
                                 try {
                                     final UUID uuid = UUIDFetcher.getUUIDOf(input);
-                                    if(uuid != null) name[0] = uuid.toString();
-                                    else return ChatColor.RED + "Not a valid name.";
+                                    if(uuid != null) {
+                                        final String uuidString = uuid.toString();
+                                        handleContribution(true, player, new String[] { uuidString, null });
+                                    } else return ChatColor.RED + "Not a valid name.";
                                 } catch (Exception ex) {
                                     throw new RuntimeException(ex);
                                 }
@@ -78,20 +80,6 @@ public class ContributorsInventory extends AbstractEditorInventory {
                         decider.sendMessage("you said no");
                     }
                 };
-
-
-                new InputAnvil(clicker, "Their contribution?", new AnvilGUI.ClickHandler() {
-                    @Override
-                    public String onClick(Player player, String contribution) {
-                        if(name[0] != null) ContributorsInventory.super.documentHandler.set(ContributorsParentModule.class, ContributorModule.class,
-                                    ContinuingMap.from("uuid", name[0]).add("contribution", contribution));
-                        else ContributorsInventory.super.documentHandler.set(ContributorsParentModule.class, ContributorModule.class, name[1],
-                                    ContinuingMap.from("contribution", contribution));
-
-                        new ContributorsInventory(player, ContributorsInventory.super.xmlWorld);
-                        return contribution; //no flicker
-                    }
-                });
             }
         });
 
@@ -102,7 +90,27 @@ public class ContributorsInventory extends AbstractEditorInventory {
             }
         });
 
-        //TODO - Show all contributors
+        //TODO - Show all contributors and make them able to be removed
+    }
+
+    private void handleContribution(boolean contributor, Player player, String[] name) {
+        //name[0] = uuid, name[1] = name
+        new InputAnvil(player, "Their contribution?", new AnvilGUI.ClickHandler() {
+            @Override
+            public String onClick(Player player, String contribution) {
+                if(contributor) {
+                    if (name[0] != null) ContributorsInventory.super.documentHandler.add(ContributorsParentModule.class, ContributorModule.class,
+                                ContinuingMap.from("uuid", name[0]).add("contribution", contribution));
+                    else ContributorsInventory.super.documentHandler.add(ContributorsParentModule.class, ContributorModule.class, name[1],
+                                ContinuingMap.from("contribution", contribution));
+
+                } else {
+                    //TODO - Handle author
+                }
+                new ContributorsInventory(player, ContributorsInventory.super.xmlWorld);
+                return contribution; //no flicker
+            }
+        });
     }
 
 }
