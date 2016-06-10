@@ -40,7 +40,7 @@ public class ContributorModule extends XMLModule {
     protected List<XMLAttribute> getAttributes() {
         return Arrays.asList(
                 new XMLAttribute("contribution", "Unknown", null, true, false),
-                new XMLAttribute("uuid", "Unknown", null, true, false)
+                new XMLAttribute("uuid", "Unknown", null, false, false)
         );
     }
 

@@ -12,8 +12,10 @@ import net.buildstatic.util.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.w3c.dom.Element;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /*
@@ -60,7 +62,6 @@ public class ContributorsInventory extends AbstractEditorInventory {
                 handle(player, true);
             }
         });
-
         set(5, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {
             @Override
             public void onClick(Player clicker) {
@@ -68,7 +69,11 @@ public class ContributorsInventory extends AbstractEditorInventory {
             }
         });
 
-        //TODO - Show all contributors and make them able to be removed
+        final List<Element> elements = super.documentHandler.get(ContributorsParentModule.class, ContributorModule.class);
+        elements.addAll(super.documentHandler.get(AuthorsParentModule.class, AuthorModule.class));
+        if(elements.size() > 0) {
+            //TODO - Handle the placing of the found contributors / authors
+        } else set(28, Items.build(ChatColor.RED + "No Contributors or Authors", Material.BARRIER, Arrays.asList("Click above to add some!")));
     }
 
     private void handle(Player player, boolean contributor) {
