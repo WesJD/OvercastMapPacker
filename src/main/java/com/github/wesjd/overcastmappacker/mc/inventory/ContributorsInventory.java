@@ -9,9 +9,12 @@ import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.Contribut
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.parents.AuthorsParentModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.parents.ContributorsParentModule;
 import net.buildstatic.util.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.w3c.dom.Element;
 
 import java.util.Arrays;
@@ -51,29 +54,86 @@ public class ContributorsInventory extends AbstractEditorInventory {
     public void build() {
         set(0, Items.GO_BACK, new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 new MainInventory(clicker, ContributorsInventory.super.xmlWorld);
             }
         });
 
-        set(3, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
+        set(3, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {
             @Override
-            public void onClick(Player clicker) {
-                handle(player, true);
-            }
-        });
-        set(5, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {
-            @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 handle(player, false);
             }
         });
+        set(5, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
+            @Override
+            public void onClick(Player clicker, ClickType type) {
+                handle(player, true);
+            }
+        });
 
-        final List<Element> elements = super.documentHandler.get(ContributorsParentModule.class, ContributorModule.class);
-        elements.addAll(super.documentHandler.get(AuthorsParentModule.class, AuthorModule.class));
-        if(elements.size() > 0) {
-            //TODO - Handle the placing of the found contributors / authors
-        } else set(28, Items.build(ChatColor.RED + "No Contributors or Authors", Material.BARRIER, Arrays.asList("Click above to add some!")));
+        final List<Element> authors = super.documentHandler.get(AuthorsParentModule.class, AuthorModule.class);
+        final List<Element> contributors = super.documentHandler.get(ContributorsParentModule.class, ContributorModule.class);
+        if(contributors.size() == 0 && authors.size() == 0)
+            set(30, Items.build(ChatColor.RED + "No Contributors or Authors", Material.BARRIER, Arrays.asList("Click above to add some!")));
+        else {
+            handleShow(authors, 0, false);
+            handleShow(contributors, 5, true);
+        }
+    }
+
+    private void handleShow(List<Element> elements, int offset, boolean contributor) {
+        final int[] cur = new int[1];
+        final int[] row = new int[1];
+        elements.forEach(element -> {
+            String from;
+            String name;
+
+            if(element.hasAttribute("uuid")) {
+                name = Bukkit.getOfflinePlayer(UUID.fromString(element.getAttribute("uuid"))).getName();
+                from = "UUID";
+            } else {
+                name = element.getTextContent();
+                from = "Name";
+            }
+
+            set(((9 * (row[0] + 1)) + offset) + cur[0], Items.build(ChatColor.GREEN + name, Material.SKULL_ITEM,
+                    Arrays.asList(
+                            ChatColor.DARK_GRAY + (contributor ? "A contributor" : "An author") + " from " + from,
+                            ChatColor.YELLOW + "Left click to change contribution",
+                            ChatColor.RED + "Right click to " + ChatColor.BOLD + "DELETE"
+                    )), new Button() {
+                @Override
+                public void onClick(Player clicker, ClickType type) {
+                    if(type.isLeftClick()) new InputAnvil(clicker, element.getAttribute("contribution"), new AnvilGUI.ClickHandler() {
+                        @Override
+                        public String onClick(Player player, String input) {
+                            element.setAttribute("contribution", input);
+                            new ContributorsInventory(clicker, ContributorsInventory.super.xmlWorld);
+                            return input;
+                        }
+                    });
+                    else new YesNoInventory(clicker, Items.build(ChatColor.RED + "Remove " + name + " as " + (contributor ? "contributor" : "author") + "?", Material.SKULL_ITEM)) {
+                        @Override
+                        public void onYes(Player decider) {
+                            ContributorsInventory.super.documentHandler.get(null, ContributorsParentModule.class).get(0).removeChild(element);
+                            new ContributorsInventory(clicker, ContributorsInventory.super.xmlWorld);
+                        }
+
+                        @Override
+                        public void onNo(Player decider) {
+                            new ContributorsInventory(clicker, ContributorsInventory.super.xmlWorld);
+                        }
+                    };
+                }
+            });
+
+            cur[0]++;
+            if(cur[0] == 4) {
+                cur[0] = 0;
+                row[0]++;
+            }
+        });
     }
 
     private void handle(Player player, boolean contributor) {

@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 
 import java.util.Arrays;
 
@@ -42,21 +43,21 @@ public class MainInventory extends AbstractEditorInventory {
     public void build() {
         set(4, Items.build(ChatColor.GREEN + super.xmlWorld.getWorld().getName(), Material.GRASS, Arrays.asList("Click to change main map settings")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 new WorldInventory(clicker, MainInventory.super.xmlWorld);
             }
         });
 
         set(12, Items.build(ChatColor.YELLOW + "Authors and Contributors", Material.SKULL_ITEM, Arrays.asList("Click to manage the contributors", "of this map")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 new ContributorsInventory(clicker, MainInventory.super.xmlWorld);
             }
         });
 
         set(45, Items.build(ChatColor.YELLOW + "Save XML", Material.ANVIL, Arrays.asList("Save the map.xml")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 MainInventory.super.documentHandler.saveDocument();
                 clicker.playSound(clicker.getLocation(), Sound.BLOCK_ANVIL_USE, 1F, 1F);
             }

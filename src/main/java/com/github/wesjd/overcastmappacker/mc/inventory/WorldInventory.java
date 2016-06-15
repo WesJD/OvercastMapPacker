@@ -13,6 +13,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.w3c.dom.Element;
 
@@ -54,35 +55,35 @@ public class WorldInventory extends AbstractEditorInventory {
     public void build() {
         set(0, Items.GO_BACK, new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 new MainInventory(clicker, WorldInventory.super.xmlWorld);
             }
         });
 
         set(10, Items.build(ChatColor.GREEN + "Name", Material.NAME_TAG, Arrays.asList("The name of this map")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 handleSimple(clicker, "Type a name...", NameModule.class);
             }
         });
 
         set(12, Items.build(ChatColor.GREEN + "Version", Material.BREWING_STAND_ITEM, Arrays.asList("The map's semantic version")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 handleSimple(clicker, "1.0.0", VersionModule.class);
             }
         });
 
         set(14, Items.build(ChatColor.GREEN + "Objective", Material.PAPER, Arrays.asList("Objective of this map")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 handleSimple(clicker, "Type an objective...", ObjectiveModule.class);
             }
         });
 
         set(16, Items.build(ChatColor.GREEN + "Edition", Material.BOOKSHELF, Arrays.asList("Pick an edition for this map")), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 new PickAnEdition(clicker, WorldInventory.super.xmlWorld);
             }
         });
@@ -110,7 +111,7 @@ public class WorldInventory extends AbstractEditorInventory {
         public void build() {
             set(0, Items.GO_BACK, new Button() {
                 @Override
-                public void onClick(Player clicker) {
+                public void onClick(Player clicker, ClickType type) {
                     new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
                 }
             });
@@ -137,21 +138,21 @@ public class WorldInventory extends AbstractEditorInventory {
 
             set(3, standardItem, new Button() {
                 @Override
-                public void onClick(Player clicker) {
+                public void onClick(Player clicker, ClickType type) {
                     PickAnEdition.super.documentHandler.set(null, EditionModule.class, "standard");
                     new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
                 }
             });
             set(4, rankedItem, new Button() {
                 @Override
-                public void onClick(Player clicker) {
+                public void onClick(Player clicker, ClickType type) {
                     PickAnEdition.super.documentHandler.set(null, EditionModule.class, "ranked");
                     new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
                 }
             });
             set(5, tournamentItem, new Button() {
                 @Override
-                public void onClick(Player clicker) {
+                public void onClick(Player clicker, ClickType type) {
                     PickAnEdition.super.documentHandler.set(null, EditionModule.class, "tournament");
                     new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
                 }

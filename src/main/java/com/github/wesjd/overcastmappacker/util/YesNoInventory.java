@@ -3,6 +3,7 @@ package com.github.wesjd.overcastmappacker.util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 /*
@@ -43,13 +44,13 @@ public abstract class YesNoInventory extends AbstractInventory {
         set(13, icon);
         set(11, Items.build(ChatColor.GREEN + "Yes", Material.STAINED_CLAY, (short) 5), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 onYes(clicker);
             }
         });
         set(15, Items.build(ChatColor.RED + "No", Material.STAINED_CLAY, (short) 14), new Button() {
             @Override
-            public void onClick(Player clicker) {
+            public void onClick(Player clicker, ClickType type) {
                 onNo(clicker);
             }
         });
