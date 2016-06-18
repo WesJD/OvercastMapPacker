@@ -109,7 +109,7 @@ public class ContributorsInventory extends AbstractEditorInventory {
                         @Override
                         public String onClick(Player player, String input) {
                             element.setAttribute("contribution", input);
-                            new ContributorsInventory(clicker, ContributorsInventory.super.xmlWorld);
+                            ContributorsInventory.super.open();
                             return input;
                         }
                     });
@@ -117,12 +117,12 @@ public class ContributorsInventory extends AbstractEditorInventory {
                         @Override
                         public void onYes(Player decider) {
                             ContributorsInventory.super.documentHandler.get(null, ContributorsParentModule.class).get(0).removeChild(element);
-                            new ContributorsInventory(clicker, ContributorsInventory.super.xmlWorld);
+                            ContributorsInventory.super.open();
                         }
 
                         @Override
                         public void onNo(Player decider) {
-                            new ContributorsInventory(clicker, ContributorsInventory.super.xmlWorld);
+                            ContributorsInventory.super.open();
                         }
                     };
                 }
@@ -184,7 +184,7 @@ public class ContributorsInventory extends AbstractEditorInventory {
                 if(name[0] != null) ContributorsInventory.super.documentHandler.add(parentModule, module, attributes);
                 else ContributorsInventory.super.documentHandler.add(parentModule, module, name[1], attributes);
 
-                new ContributorsInventory(player, ContributorsInventory.super.xmlWorld);
+                ContributorsInventory.super.open();
                 return contribution; //no flicker
             }
         });

@@ -55,6 +55,7 @@ public abstract class AbstractInventory {
     }
 
     protected void open() {
+        inventory.clear();
         build();
         handleOpenInventoryClosing();
         player.openInventory(inventory);

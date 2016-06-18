@@ -1,24 +1,21 @@
-package com.github.wesjd.overcastmappacker.mc.inventory;
+package com.github.wesjd.overcastmappacker.mc.inventory.world;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.mc.inventory.AbstractEditorInventory;
+import com.github.wesjd.overcastmappacker.mc.inventory.MainInventory;
 import com.github.wesjd.overcastmappacker.util.InputAnvil;
 import com.github.wesjd.overcastmappacker.util.Items;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
-import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.EditionModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.NameModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.ObjectiveModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.VersionModule;
 import net.buildstatic.util.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.inventory.ItemStack;
 import org.w3c.dom.Element;
 
-import javax.swing.text.EditorKit;
-import java.beans.PropertyEditorManager;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,7 +81,14 @@ public class WorldInventory extends AbstractEditorInventory {
         set(16, Items.build(ChatColor.GREEN + "Edition", Material.BOOKSHELF, Arrays.asList("Pick an edition for this map")), new Button() {
             @Override
             public void onClick(Player clicker, ClickType type) {
-                new PickAnEdition(clicker, WorldInventory.super.xmlWorld);
+                new EditionInventory(clicker, WorldInventory.super.xmlWorld);
+            }
+        });
+
+        set(28, Items.build(ChatColor.GREEN + "Rules", Material.BEDROCK, Arrays.asList("Add custom rules to this map")), new Button() {
+            @Override
+            public void onClick(Player clicker, ClickType type) {
+                new RulesInventory(clicker, WorldInventory.super.xmlWorld);
             }
         });
     }
@@ -95,70 +99,10 @@ public class WorldInventory extends AbstractEditorInventory {
             @Override
             public String onClick(Player player, String reply) {
                 WorldInventory.super.documentHandler.set(null, module, reply);
-                new WorldInventory(player, WorldInventory.super.xmlWorld);
+                WorldInventory.super.open();
                 return reply; //for no flicker
             }
         });
-    }
-
-    private class PickAnEdition extends AbstractEditorInventory {
-
-        public PickAnEdition(Player player, XMLWorld xmlWorld) {
-            super(player, xmlWorld, 9, "Pick an Edition");
-        }
-
-        @Override
-        public void build() {
-            set(0, Items.GO_BACK, new Button() {
-                @Override
-                public void onClick(Player clicker, ClickType type) {
-                    new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
-                }
-            });
-
-            String value = "wot";
-            final List<Element> elements = super.documentHandler.get(null, EditionModule.class);
-            if(elements.size() > 0) value = elements.get(0).getTextContent();
-
-            final ItemStack standardItem = Items.build(ChatColor.GREEN + "Standard", Material.IRON_AXE);
-            final ItemStack rankedItem = Items.build(ChatColor.GREEN + "Ranked", Material.IRON_SWORD);
-            final ItemStack tournamentItem = Items.build(ChatColor.GREEN + "Tournament", Material.BANNER);
-
-            switch (value) {
-                case "standard":
-                    Items.addEnchantments(standardItem, Enchantment.DURABILITY);
-                    break;
-                case "ranked":
-                    Items.addEnchantments(rankedItem, Enchantment.DURABILITY);
-                    break;
-                case "tournament":
-                    Items.addEnchantments(tournamentItem, Enchantment.DURABILITY);
-                    break;
-            }
-
-            set(3, standardItem, new Button() {
-                @Override
-                public void onClick(Player clicker, ClickType type) {
-                    PickAnEdition.super.documentHandler.set(null, EditionModule.class, "standard");
-                    new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
-                }
-            });
-            set(4, rankedItem, new Button() {
-                @Override
-                public void onClick(Player clicker, ClickType type) {
-                    PickAnEdition.super.documentHandler.set(null, EditionModule.class, "ranked");
-                    new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
-                }
-            });
-            set(5, tournamentItem, new Button() {
-                @Override
-                public void onClick(Player clicker, ClickType type) {
-                    PickAnEdition.super.documentHandler.set(null, EditionModule.class, "tournament");
-                    new WorldInventory(clicker, PickAnEdition.super.xmlWorld);
-                }
-            });
-        }
-
     }
 
 }

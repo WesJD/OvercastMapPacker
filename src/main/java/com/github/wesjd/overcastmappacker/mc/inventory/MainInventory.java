@@ -1,6 +1,7 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.mc.inventory.world.WorldInventory;
 import com.github.wesjd.overcastmappacker.util.Items;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
