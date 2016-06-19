@@ -1,8 +1,15 @@
-package com.github.wesjd.overcastmappacker.util;
+package com.github.wesjd.overcastmappacker.mc.inventory.team;
 
-import com.github.wesjd.overcastmappacker.OvercastMapPacker;
+import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.mc.inventory.AbstractEditorInventory;
+import com.github.wesjd.overcastmappacker.mc.inventory.MainInventory;
+import com.github.wesjd.overcastmappacker.util.InputAnvil;
+import com.github.wesjd.overcastmappacker.util.Items;
 import net.buildstatic.util.anvilgui.AnvilGUI;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 
 /*
  * The MIT License (MIT)
@@ -27,10 +34,25 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class InputAnvil extends AnvilGUI {
+public class TeamInventory extends AbstractEditorInventory {
 
-    public InputAnvil(Player holder, String insert, ClickHandler clickHandler) {
-        super(OvercastMapPacker.get(), holder, insert, clickHandler);
+    public TeamInventory(Player player, XMLWorld xmlWorld, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 18, "Teams");
+    }
+
+    @Override
+    public void build() {
+        set(4, Items.build(ChatColor.GREEN + "Add Team", Material.BANNER),  (clicker, type) -> {
+            new InputAnvil(clicker, "Type a team name...", new AnvilGUI.ClickHandler() {
+                @Override
+                public String onClick(Player player, String input) {
+                    final String name = input;
+                    final String id = input.toLowerCase() + "-team";
+
+                    return input; //no flicker
+                }
+            });
+        });
     }
 
 }

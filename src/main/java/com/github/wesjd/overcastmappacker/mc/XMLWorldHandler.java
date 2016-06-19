@@ -35,10 +35,7 @@ import java.util.Set;
  */
 public class XMLWorldHandler {
 
-    private static final XMLWorldHandler instance = new XMLWorldHandler();
     private final Set<XMLWorld> worlds = new HashSet<>();
-
-    private XMLWorldHandler() {}
 
     public XMLWorld getWorld(World bukkitWorld) {
         return worlds.stream()
@@ -57,12 +54,6 @@ public class XMLWorldHandler {
         final Collection<XMLWorld> ret = Collections.unmodifiableCollection(worlds);
         worlds.clear();
         return ret;
-    }
-
-
-
-    public static XMLWorldHandler getInstance() {
-        return instance;
     }
 
 }

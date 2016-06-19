@@ -41,6 +41,7 @@ public class OvercastMapPacker extends JavaPlugin {
     public static final String MAP_PROTOCOL_NUMBER = "1.4.1";
 
     private static OvercastMapPacker instance;
+    private final XMLWorldHandler worldHandler = new XMLWorldHandler();
 
     @Override
     public void onLoad() {
@@ -54,11 +55,15 @@ public class OvercastMapPacker extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        XMLWorldHandler.getInstance().getAndRemoveAll().forEach(xmlWorld -> xmlWorld.getHandler().saveDocument());
+        worldHandler.getAndRemoveAll().forEach(xmlWorld -> xmlWorld.getHandler().saveDocument());
         instance = null;
     }
 
-    public static OvercastMapPacker getInstance() {
+    public XMLWorldHandler getWorldHandler() {
+        return worldHandler;
+    }
+
+    public static OvercastMapPacker get() {
         return instance;
     }
 

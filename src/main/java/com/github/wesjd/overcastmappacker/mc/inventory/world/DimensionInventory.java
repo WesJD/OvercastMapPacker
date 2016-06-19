@@ -40,43 +40,28 @@ import java.util.List;
  */
 class DimensionInventory extends AbstractEditorInventory {
 
-    public DimensionInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 9, "Pick a Dimension");
+    public DimensionInventory(Player player, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 9, "Pick a Dimension");
     }
 
     @Override
     public void build() {
-        set(0, Items.GO_BACK, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
-            }
-        });
 
         String value = "wot";
         final List<Element> elements = super.documentHandler.get(null, DimensionModule.class);
         if (elements.size() > 0) value = elements.get(0).getTextContent();
 
-        set(3, Items.build(ChatColor.GREEN + (value.equals("normal") ? ChatColor.BOLD.toString() : "") + "Normal", Material.GRASS), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                DimensionInventory.super.documentHandler.set(null, DimensionModule.class, "normal");
-                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
-            }
+        set(3, Items.build(ChatColor.GREEN + (value.equals("normal") ? ChatColor.BOLD.toString() : "") + "Normal", Material.GRASS), (clicker, type) -> {
+            super.documentHandler.set(null, DimensionModule.class, "normal");
+            super.returnToPrevious();
         });
-        set(4, Items.build(ChatColor.GREEN + (value.equals("nether") ? ChatColor.BOLD.toString() : "") + "Nether", Material.NETHERRACK), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                DimensionInventory.super.documentHandler.set(null, DimensionModule.class, "nether");
-                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
-            }
+        set(4, Items.build(ChatColor.GREEN + (value.equals("nether") ? ChatColor.BOLD.toString() : "") + "Nether", Material.NETHERRACK), (clicker, type) -> {
+            super.documentHandler.set(null, DimensionModule.class, "nether");
+            super.returnToPrevious();
         });
-        set(5, Items.build(ChatColor.GREEN + (value.equals("the end") ? ChatColor.BOLD.toString() : "") + "The End", Material.ENDER_STONE), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                DimensionInventory.super.documentHandler.set(null, DimensionModule.class, "the end");
-                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
-            }
+        set(5, Items.build(ChatColor.GREEN + (value.equals("the end") ? ChatColor.BOLD.toString() : "") + "The End", Material.ENDER_STONE), (clicker, type) -> {
+            super.documentHandler.set(null, DimensionModule.class, "the end");
+            super.returnToPrevious();
         });
     }
 

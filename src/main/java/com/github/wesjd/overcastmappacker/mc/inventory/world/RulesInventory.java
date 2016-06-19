@@ -11,7 +11,6 @@ import net.buildstatic.util.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 import org.w3c.dom.Element;
 
 import java.util.Arrays;
@@ -42,22 +41,13 @@ import java.util.List;
  */
 public class RulesInventory extends AbstractEditorInventory {
 
-    public RulesInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 27, "Rules");
+    public RulesInventory(Player player, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 27, "Rules");
     }
 
     @Override
     public void build() {
-        set(0, Items.GO_BACK, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new WorldInventory(clicker, RulesInventory.super.xmlWorld);
-            }
-        });
-
-        set(4, Items.build(ChatColor.YELLOW + "Add Rule", Material.BEDROCK), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
+        set(4, Items.build(ChatColor.YELLOW + "Add Rule", Material.BEDROCK), (clicker, type) ->
                 new InputAnvil(clicker, "Type a rule...", new AnvilGUI.ClickHandler() {
                     @Override
                     public String onClick(Player player, String input) {
@@ -65,48 +55,44 @@ public class RulesInventory extends AbstractEditorInventory {
                         RulesInventory.super.open();
                         return input; //no flicker
                     }
-                });
-            }
-        });
+                }));
 
         final List<Element> elements = super.documentHandler.get(RulesParentModule.class, RuleModule.class);
-        if(elements.size() > 0) {
-            final int[] cur = new int[] {9};
+        if (elements.size() > 0) {
+            final int[] cur = new int[]{9};
             elements.forEach(element -> {
                 set(cur[0], Items.build(ChatColor.YELLOW + element.getTextContent(), Material.BEDROCK, Arrays.asList(
                         ChatColor.YELLOW + "Left click to change",
                         ChatColor.RED + "Right click to " + ChatColor.BOLD + "DELETE"
-                )), new Button() {
-                    @Override
-                    public void onClick(Player clicker, ClickType type) {
-                        if(type.isLeftClick()) {
-                            new InputAnvil(clicker, element.getTextContent(), new AnvilGUI.ClickHandler() {
-                                @Override
-                                public String onClick(Player player, String input) {
-                                    element.setTextContent(input);
-                                    RulesInventory.super.open();
-                                    return input; //no flicker
-                                }
-                            });
-                        } else {
-                            new YesNoInventory(clicker, Items.build(ChatColor.YELLOW + "Remove rule \"" + element.getTextContent() + "\"?", Material.BEDROCK)) {
-                                @Override
-                                public void onYes(Player decider) {
-                                    RulesInventory.super.documentHandler.get(null, RulesParentModule.class).get(0).removeChild(element);
-                                    RulesInventory.super.open();
-                                }
+                )), (clicker, type) -> {
+                    if (type.isLeftClick()) {
+                        new InputAnvil(clicker, element.getTextContent(), new AnvilGUI.ClickHandler() {
+                            @Override
+                            public String onClick(Player player, String input) {
+                                element.setTextContent(input);
+                                RulesInventory.super.open();
+                                return input; //no flicker
+                            }
+                        });
+                    } else {
+                        new YesNoInventory(clicker, Items.build(ChatColor.YELLOW + "Remove rule \"" + element.getTextContent() + "\"?", Material.BEDROCK)) {
+                            @Override
+                            public void onYes(Player decider) {
+                                RulesInventory.super.documentHandler.get(null, RulesParentModule.class).get(0).removeChild(element);
+                                RulesInventory.super.open();
+                            }
 
-                                @Override
-                                public void onNo(Player decider) {
-                                    RulesInventory.super.open();
-                                }
-                            };
-                        }
+                            @Override
+                            public void onNo(Player decider) {
+                                RulesInventory.super.open();
+                            }
+                        };
                     }
                 });
                 cur[0]++;
             });
-        } else set(13, Items.build(ChatColor.RED + "No rules", Material.BARRIER, Arrays.asList("Click above to add some!")));
+        } else
+            set(13, Items.build(ChatColor.RED + "No rules", Material.BARRIER, Arrays.asList("Click above to add some!")));
     }
 
 }

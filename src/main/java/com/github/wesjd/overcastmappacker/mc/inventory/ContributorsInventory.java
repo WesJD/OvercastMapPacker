@@ -46,35 +46,18 @@ import java.util.UUID;
  */
 public class ContributorsInventory extends AbstractEditorInventory {
 
-    public ContributorsInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 54, "Authors and Contributors");
+    public ContributorsInventory(Player player, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 54, "Authors and Contributors");
     }
 
     @Override
     public void build() {
-        set(0, Items.GO_BACK, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new MainInventory(clicker, ContributorsInventory.super.xmlWorld);
-            }
-        });
-
-        set(3, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                handle(player, false);
-            }
-        });
-        set(5, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                handle(player, true);
-            }
-        });
+        set(3, Items.build(ChatColor.GRAY + "Add Author", Material.BOOK), (clicker, type) -> handle(clicker, false));
+        set(5, Items.build(ChatColor.GREEN + "Add Contributor", Material.BOOK), (clicker, type) -> handle(clicker, true));
 
         final List<Element> authors = super.documentHandler.get(AuthorsParentModule.class, AuthorModule.class);
         final List<Element> contributors = super.documentHandler.get(ContributorsParentModule.class, ContributorModule.class);
-        if(contributors.size() == 0 && authors.size() == 0)
+        if (contributors.size() == 0 && authors.size() == 0)
             set(30, Items.build(ChatColor.RED + "No Contributors or Authors", Material.BARRIER, Arrays.asList("Click above to add some!")));
         else {
             handleShow(authors, 0, false);
@@ -89,7 +72,7 @@ public class ContributorsInventory extends AbstractEditorInventory {
             String from;
             String name;
 
-            if(element.hasAttribute("uuid")) {
+            if (element.hasAttribute("uuid")) {
                 name = Bukkit.getOfflinePlayer(UUID.fromString(element.getAttribute("uuid"))).getName();
                 from = "UUID";
             } else {
@@ -102,34 +85,32 @@ public class ContributorsInventory extends AbstractEditorInventory {
                             ChatColor.DARK_GRAY + (contributor ? "A contributor" : "An author") + " from " + from,
                             ChatColor.YELLOW + "Left click to change contribution",
                             ChatColor.RED + "Right click to " + ChatColor.BOLD + "DELETE"
-                    )), new Button() {
-                @Override
-                public void onClick(Player clicker, ClickType type) {
-                    if(type.isLeftClick()) new InputAnvil(clicker, element.getAttribute("contribution"), new AnvilGUI.ClickHandler() {
-                        @Override
-                        public String onClick(Player player, String input) {
-                            element.setAttribute("contribution", input);
-                            ContributorsInventory.super.open();
-                            return input;
-                        }
-                    });
-                    else new YesNoInventory(clicker, Items.build(ChatColor.RED + "Remove " + name + " as " + (contributor ? "contributor" : "author") + "?", Material.SKULL_ITEM)) {
-                        @Override
-                        public void onYes(Player decider) {
-                            ContributorsInventory.super.documentHandler.get(null, ContributorsParentModule.class).get(0).removeChild(element);
-                            ContributorsInventory.super.open();
-                        }
+                    )),
+                    (clicker, type) -> {
+                        if (type.isLeftClick()) new InputAnvil(clicker, element.getAttribute("contribution"), new AnvilGUI.ClickHandler() {
+                                @Override
+                                public String onClick(Player player, String input) {
+                                    element.setAttribute("contribution", input);
+                                    ContributorsInventory.super.open();
+                                    return input;
+                                }
+                            });
+                        else new YesNoInventory(clicker, Items.build(ChatColor.RED + "Remove " + name + " as " + (contributor ? "contributor" : "author") + "?", Material.SKULL_ITEM)) {
+                                @Override
+                                public void onYes(Player decider) {
+                                    ContributorsInventory.super.documentHandler.get(null, ContributorsParentModule.class).get(0).removeChild(element);
+                                    ContributorsInventory.super.open();
+                                }
 
-                        @Override
-                        public void onNo(Player decider) {
-                            ContributorsInventory.super.open();
-                        }
-                    };
-                }
-            });
+                                @Override
+                                public void onNo(Player decider) {
+                                    ContributorsInventory.super.open();
+                                }
+                            };
+                    });
 
             cur[0]++;
-            if(cur[0] == 4) {
+            if (cur[0] == 4) {
                 cur[0] = 0;
                 row[0]++;
             }
@@ -145,9 +126,9 @@ public class ContributorsInventory extends AbstractEditorInventory {
                     public String onClick(Player player, String input) {
                         try {
                             final UUID uuid = UUIDFetcher.getUUIDOf(input);
-                            if(uuid != null) {
+                            if (uuid != null) {
                                 final String uuidString = uuid.toString();
-                                handleAdd(contributor, player, new String[] { uuidString, null });
+                                handleAdd(contributor, player, new String[]{uuidString, null});
                             } else return ChatColor.RED + "Not a valid name.";
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
@@ -162,7 +143,7 @@ public class ContributorsInventory extends AbstractEditorInventory {
                 new InputAnvil(decider, "What is thier name?", new AnvilGUI.ClickHandler() {
                     @Override
                     public String onClick(Player player, String input) {
-                        handleAdd(contributor, decider, new String[] { null, input });
+                        handleAdd(contributor, decider, new String[]{null, input});
                         return input;
                     }
                 });
@@ -178,10 +159,10 @@ public class ContributorsInventory extends AbstractEditorInventory {
                 final Class<? extends ParentXMLModule> parentModule = (contributor ? ContributorsParentModule.class : AuthorsParentModule.class);
                 final Class<? extends XMLModule> module = (contributor ? ContributorModule.class : AuthorModule.class);
                 final ContinuingMap<String, String> attributes = new ContinuingMap<>();
-                if(name[0] != null) attributes.add("uuid", name[0]);
+                if (name[0] != null) attributes.add("uuid", name[0]);
                 attributes.add("contribution", contribution);
 
-                if(name[0] != null) ContributorsInventory.super.documentHandler.add(parentModule, module, attributes);
+                if (name[0] != null) ContributorsInventory.super.documentHandler.add(parentModule, module, attributes);
                 else ContributorsInventory.super.documentHandler.add(parentModule, module, name[1], attributes);
 
                 ContributorsInventory.super.open();

@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public abstract class AbstractInventory {
 
@@ -38,10 +39,10 @@ public abstract class AbstractInventory {
         }
     }
 
-    private final Map<Integer, Button> buttons = new HashMap<>();
+    private final Map<Integer, BiConsumer<Player, ClickType>> buttons = new HashMap<>();
     private final Listeners listeners = new Listeners();
 
-    private final Inventory inventory;
+    protected final Inventory inventory;
     protected final Player player;
 
     public AbstractInventory(Player player, int size, String name) {
@@ -55,11 +56,10 @@ public abstract class AbstractInventory {
     }
 
     protected void open() {
-        inventory.clear();
         build();
         handleOpenInventoryClosing();
         player.openInventory(inventory);
-        Bukkit.getPluginManager().registerEvents(listeners, OvercastMapPacker.getInstance());
+        Bukkit.getPluginManager().registerEvents(listeners, OvercastMapPacker.get());
         onOpen();
     }
 
@@ -90,15 +90,9 @@ public abstract class AbstractInventory {
         inventory.setItem(slot, stack);
     }
 
-    public void set(int slot, ItemStack stack, Button button) {
+    public void set(int slot, ItemStack stack, BiConsumer<Player, ClickType> consumer) {
         set(slot, stack);
-        buttons.put(slot, button);
-    }
-
-    public abstract class Button {
-
-        public abstract void onClick(Player clicker, ClickType type);
-
+        buttons.put(slot, consumer);
     }
 
     private class Listeners implements Listener {
@@ -112,7 +106,7 @@ public abstract class AbstractInventory {
         public void onInventoryClick(InventoryClickEvent e) {
             if (e.getInventory().getName().equals(inventory.getName()) && e.getInventory().getHolder().equals(player)) {
                 e.setCancelled(true);
-                if (buttons.containsKey(e.getRawSlot())) buttons.get(e.getRawSlot()).onClick((Player) e.getWhoClicked(), e.getClick());
+                if (buttons.containsKey(e.getRawSlot())) buttons.get(e.getRawSlot()).accept((Player) e.getWhoClicked(), e.getClick());
             }
         }
 

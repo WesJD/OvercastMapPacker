@@ -39,19 +39,12 @@ import java.util.List;
  */
 class EditionInventory extends AbstractEditorInventory {
 
-    public EditionInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 9, "Pick an Edition");
+    public EditionInventory(Player player, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 9, "Pick an Edition");
     }
 
     @Override
     public void build() {
-        set(0, Items.GO_BACK, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
-            }
-        });
-
         String value = "wot";
         final List<Element> elements = super.documentHandler.get(null, EditionModule.class);
         if (elements.size() > 0) value = elements.get(0).getTextContent();
@@ -72,26 +65,17 @@ class EditionInventory extends AbstractEditorInventory {
                 break;
         }
 
-        set(3, standardItem, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                EditionInventory.super.documentHandler.set(null, EditionModule.class, "standard");
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
-            }
+        set(3, standardItem, (clicker, type) -> {
+            super.documentHandler.set(null, EditionModule.class, "standard");
+            super.returnToPrevious();
         });
-        set(4, rankedItem, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                EditionInventory.super.documentHandler.set(null, EditionModule.class, "ranked");
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
-            }
+        set(4, rankedItem, (clicker, type) -> {
+            super.documentHandler.set(null, EditionModule.class, "ranked");
+            super.returnToPrevious();
         });
-        set(5, tournamentItem, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                EditionInventory.super.documentHandler.set(null, EditionModule.class, "tournament");
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
-            }
+        set(5, tournamentItem, (clicker, type) -> {
+            super.documentHandler.set(null, EditionModule.class, "tournament");
+            super.returnToPrevious();
         });
     }
 

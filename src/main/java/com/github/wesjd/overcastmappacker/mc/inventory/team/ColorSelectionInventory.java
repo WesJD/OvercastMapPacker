@@ -1,7 +1,7 @@
-package com.github.wesjd.overcastmappacker.util;
+package com.github.wesjd.overcastmappacker.mc.inventory.team;
 
-import com.github.wesjd.overcastmappacker.OvercastMapPacker;
-import net.buildstatic.util.anvilgui.AnvilGUI;
+import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.mc.inventory.AbstractEditorInventory;
 import org.bukkit.entity.Player;
 
 /*
@@ -27,10 +27,15 @@ import org.bukkit.entity.Player;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class InputAnvil extends AnvilGUI {
+public class ColorSelectionInventory extends AbstractEditorInventory {
 
-    public InputAnvil(Player holder, String insert, ClickHandler clickHandler) {
-        super(OvercastMapPacker.get(), holder, insert, clickHandler);
+    public ColorSelectionInventory(Player player, XMLWorld xmlWorld, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 54, "Select a Color");
+    }
+
+    @Override
+    public void build() {
+
     }
 
 }

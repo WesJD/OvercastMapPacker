@@ -42,18 +42,8 @@ public abstract class YesNoInventory extends AbstractInventory {
     @Override
     public void build() {
         set(13, icon);
-        set(11, Items.build(ChatColor.GREEN + "Yes", Material.STAINED_CLAY, (short) 5), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                onYes(clicker);
-            }
-        });
-        set(15, Items.build(ChatColor.RED + "No", Material.STAINED_CLAY, (short) 14), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                onNo(clicker);
-            }
-        });
+        set(11, Items.build(ChatColor.GREEN + "Yes", Material.STAINED_CLAY, (short) 5), (clicker, type) -> onYes(clicker));
+        set(15, Items.build(ChatColor.RED + "No", Material.STAINED_CLAY, (short) 14), (clicker, type) -> onNo(clicker));
     }
 
     public abstract void onYes(Player decider);

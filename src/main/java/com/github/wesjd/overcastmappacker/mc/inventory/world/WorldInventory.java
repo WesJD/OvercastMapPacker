@@ -10,6 +10,7 @@ import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.NameModul
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.ObjectiveModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.VersionModule;
 import net.buildstatic.util.anvilgui.AnvilGUI;
+import net.buildstatic.util.anvilgui.version.VersionWrapper;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,62 +45,31 @@ import java.util.List;
  */
 public class WorldInventory extends AbstractEditorInventory {
 
-    public WorldInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 54, "Map Settings");
+    public WorldInventory(Player player, AbstractEditorInventory returnInv) {
+        super(player, returnInv, 54, "Map Settings");
     }
 
     @Override
     public void build() {
-        set(0, Items.GO_BACK, new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new MainInventory(clicker, WorldInventory.super.xmlWorld);
-            }
-        });
+        set(10, Items.build(ChatColor.GREEN + "Name", Material.NAME_TAG, Arrays.asList("The name of this map")),
+                (clicker, type) -> handleSimple(player, "Type a name...", NameModule.class));
 
-        set(10, Items.build(ChatColor.GREEN + "Name", Material.NAME_TAG, Arrays.asList("The name of this map")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                handleSimple(clicker, "Type a name...", NameModule.class);
-            }
-        });
+        set(12, Items.build(ChatColor.GREEN + "Version", Material.BREWING_STAND_ITEM, Arrays.asList("The map's semantic version")),
+                (clicker, type) -> handleSimple(player, "1.0.0", VersionModule.class));
 
-        set(12, Items.build(ChatColor.GREEN + "Version", Material.BREWING_STAND_ITEM, Arrays.asList("The map's semantic version")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                handleSimple(clicker, "1.0.0", VersionModule.class);
-            }
-        });
+        set(14, Items.build(ChatColor.GREEN + "Objective", Material.PAPER, Arrays.asList("Objective of this map")),
+                (clicker, type) -> handleSimple(player, "Type an objective...", ObjectiveModule.class));
 
-        set(14, Items.build(ChatColor.GREEN + "Objective", Material.PAPER, Arrays.asList("Objective of this map")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                handleSimple(clicker, "Type an objective...", ObjectiveModule.class);
-            }
-        });
+        set(16, Items.build(ChatColor.GREEN + "Edition", Material.BOOKSHELF, Arrays.asList("Pick an edition for this map")),
+                (clicker, type) -> new EditionInventory(clicker, this));
 
-        set(16, Items.build(ChatColor.GREEN + "Edition", Material.BOOKSHELF, Arrays.asList("Pick an edition for this map")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new EditionInventory(clicker, WorldInventory.super.xmlWorld);
-            }
-        });
-
-        set(28, Items.build(ChatColor.GREEN + "Rules", Material.BEDROCK, Arrays.asList("Add custom rules to this map")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new RulesInventory(clicker, WorldInventory.super.xmlWorld);
-            }
-        });
+        set(28, Items.build(ChatColor.GREEN + "Rules", Material.BEDROCK, Arrays.asList("Add custom rules to this map")),
+                (clicker, type) -> new RulesInventory(clicker, this));
 
         set(30, Items.build(ChatColor.GREEN + "Broadcasts", Material.BOOK_AND_QUILL));
 
-        set(32, Items.build(ChatColor.GREEN + "Dimension", Material.NETHERRACK, Arrays.asList("Pick the dimension for this map")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new DimensionInventory(clicker, WorldInventory.super.xmlWorld);
-            }
-        });
+        set(32, Items.build(ChatColor.GREEN + "Dimension", Material.NETHERRACK, Arrays.asList("Pick the dimension for this map")),
+                (clicker, type) -> new DimensionInventory(clicker, this));
     }
 
     public void handleSimple(Player player, String insert, Class<? extends XMLModule> module) {

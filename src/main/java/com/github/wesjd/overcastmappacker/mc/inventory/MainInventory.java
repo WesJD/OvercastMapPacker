@@ -42,26 +42,15 @@ public class MainInventory extends AbstractEditorInventory {
 
     @Override
     public void build() {
-        set(4, Items.build(ChatColor.GREEN + super.xmlWorld.getWorld().getName(), Material.GRASS, Arrays.asList("Click to change main map settings")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new WorldInventory(clicker, MainInventory.super.xmlWorld);
-            }
-        });
+        set(4, Items.build(ChatColor.GREEN + super.xmlWorld.getWorld().getName(), Material.GRASS, Arrays.asList("Click to change main map settings")),
+                (clicker, type) -> new WorldInventory(clicker, this));
 
-        set(12, Items.build(ChatColor.YELLOW + "Authors and Contributors", Material.SKULL_ITEM, Arrays.asList("Click to manage the contributors", "of this map")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                new ContributorsInventory(clicker, MainInventory.super.xmlWorld);
-            }
-        });
+        set(12, Items.build(ChatColor.YELLOW + "Authors and Contributors", Material.SKULL_ITEM, Arrays.asList("Click to manage the contributors", "of this map")),
+                (clicker, type) -> new ContributorsInventory(clicker, this));
 
-        set(45, Items.build(ChatColor.YELLOW + "Save XML", Material.ANVIL, Arrays.asList("Save the map.xml")), new Button() {
-            @Override
-            public void onClick(Player clicker, ClickType type) {
-                MainInventory.super.documentHandler.saveDocument();
-                clicker.playSound(clicker.getLocation(), Sound.BLOCK_ANVIL_USE, 1F, 1F);
-            }
+        set(45, Items.build(ChatColor.YELLOW + "Save XML", Material.ANVIL, Arrays.asList("Save the map.xml")), (clicker, type) -> {
+            super.documentHandler.saveDocument();
+            clicker.playSound(clicker.getLocation(), Sound.BLOCK_ANVIL_USE, 1F, 1F);
         });
     }
 
