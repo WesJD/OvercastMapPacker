@@ -4,6 +4,7 @@ import com.github.wesjd.overcastmappacker.mc.XMLWorld;
 import com.github.wesjd.overcastmappacker.mc.inventory.AbstractEditorInventory;
 import com.github.wesjd.overcastmappacker.util.Items;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.EditionModule;
+import com.github.wesjd.overcastmappacker.xml.module.impl.general.terrain.DimensionModule;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -37,10 +38,10 @@ import java.util.List;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-class EditionInventory extends AbstractEditorInventory {
+class DimensionInventory extends AbstractEditorInventory {
 
-    public EditionInventory(Player player, XMLWorld xmlWorld) {
-        super(player, xmlWorld, 9, "Pick an Edition");
+    public DimensionInventory(Player player, XMLWorld xmlWorld) {
+        super(player, xmlWorld, 9, "Pick a Dimension");
     }
 
     @Override
@@ -48,49 +49,33 @@ class EditionInventory extends AbstractEditorInventory {
         set(0, Items.GO_BACK, new Button() {
             @Override
             public void onClick(Player clicker, ClickType type) {
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
+                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
             }
         });
 
         String value = "wot";
-        final List<Element> elements = super.documentHandler.get(null, EditionModule.class);
+        final List<Element> elements = super.documentHandler.get(null, DimensionModule.class);
         if (elements.size() > 0) value = elements.get(0).getTextContent();
 
-        final ItemStack standardItem = Items.build(ChatColor.GREEN + (value.equals("standard") ? ChatColor.BOLD.toString() : "") + "Standard", Material.IRON_AXE);
-        final ItemStack rankedItem = Items.build(ChatColor.GREEN + (value.equals("ranked") ? ChatColor.BOLD.toString() : "") + "Ranked", Material.IRON_SWORD);
-        final ItemStack tournamentItem = Items.build(ChatColor.GREEN + (value.equals("tournament") ? ChatColor.BOLD.toString() : "") + "Tournament", Material.BANNER);
-
-        switch (value) {
-            case "standard":
-                Items.addEnchantments(standardItem, Enchantment.DURABILITY);
-                break;
-            case "ranked":
-                Items.addEnchantments(rankedItem, Enchantment.DURABILITY);
-                break;
-            case "tournament":
-                Items.addEnchantments(tournamentItem, Enchantment.DURABILITY);
-                break;
-        }
-
-        set(3, standardItem, new Button() {
+        set(3, Items.build(ChatColor.GREEN + (value.equals("normal") ? ChatColor.BOLD.toString() : "") + "Normal", Material.GRASS), new Button() {
             @Override
             public void onClick(Player clicker, ClickType type) {
-                EditionInventory.super.documentHandler.set(null, EditionModule.class, "standard");
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
+                DimensionInventory.super.documentHandler.set(null, DimensionModule.class, "normal");
+                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
             }
         });
-        set(4, rankedItem, new Button() {
+        set(4, Items.build(ChatColor.GREEN + (value.equals("nether") ? ChatColor.BOLD.toString() : "") + "Nether", Material.NETHERRACK), new Button() {
             @Override
             public void onClick(Player clicker, ClickType type) {
-                EditionInventory.super.documentHandler.set(null, EditionModule.class, "ranked");
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
+                DimensionInventory.super.documentHandler.set(null, DimensionModule.class, "nether");
+                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
             }
         });
-        set(5, tournamentItem, new Button() {
+        set(5, Items.build(ChatColor.GREEN + (value.equals("the end") ? ChatColor.BOLD.toString() : "") + "The End", Material.ENDER_STONE), new Button() {
             @Override
             public void onClick(Player clicker, ClickType type) {
-                EditionInventory.super.documentHandler.set(null, EditionModule.class, "tournament");
-                new WorldInventory(clicker, EditionInventory.super.xmlWorld);
+                DimensionInventory.super.documentHandler.set(null, DimensionModule.class, "the end");
+                new WorldInventory(clicker, DimensionInventory.super.xmlWorld);
             }
         });
     }

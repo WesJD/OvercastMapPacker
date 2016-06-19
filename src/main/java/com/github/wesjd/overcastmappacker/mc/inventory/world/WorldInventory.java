@@ -91,6 +91,15 @@ public class WorldInventory extends AbstractEditorInventory {
                 new RulesInventory(clicker, WorldInventory.super.xmlWorld);
             }
         });
+
+        set(30, Items.build(ChatColor.GREEN + "Broadcasts", Material.BOOK_AND_QUILL));
+
+        set(32, Items.build(ChatColor.GREEN + "Dimension", Material.NETHERRACK, Arrays.asList("Pick the dimension for this map")), new Button() {
+            @Override
+            public void onClick(Player clicker, ClickType type) {
+                new DimensionInventory(clicker, WorldInventory.super.xmlWorld);
+            }
+        });
     }
 
     public void handleSimple(Player player, String insert, Class<? extends XMLModule> module) {
