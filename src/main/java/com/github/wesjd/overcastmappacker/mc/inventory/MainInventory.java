@@ -1,13 +1,13 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
 import com.github.wesjd.overcastmappacker.mc.XMLWorld;
+import com.github.wesjd.overcastmappacker.mc.inventory.team.TeamsInventory;
 import com.github.wesjd.overcastmappacker.mc.inventory.world.WorldInventory;
 import com.github.wesjd.overcastmappacker.util.Items;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
 
 import java.util.Arrays;
 
@@ -47,6 +47,9 @@ public class MainInventory extends AbstractEditorInventory {
 
         set(12, Items.build(ChatColor.YELLOW + "Authors and Contributors", Material.SKULL_ITEM, Arrays.asList("Click to manage the contributors", "of this map")),
                 (clicker, type) -> new ContributorsInventory(clicker, this));
+
+        set(14, Items.build(ChatColor.GREEN + "Teams", Material.BANNER, Arrays.asList("Click to manage the teams", "of this map")),
+                (clicker, type) -> new TeamsInventory(clicker, this));
 
         set(45, Items.build(ChatColor.YELLOW + "Save XML", Material.ANVIL, Arrays.asList("Save the map.xml")), (clicker, type) -> {
             super.documentHandler.saveDocument();

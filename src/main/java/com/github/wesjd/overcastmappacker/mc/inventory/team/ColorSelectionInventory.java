@@ -1,8 +1,14 @@
 package com.github.wesjd.overcastmappacker.mc.inventory.team;
 
-import com.github.wesjd.overcastmappacker.mc.XMLWorld;
 import com.github.wesjd.overcastmappacker.mc.inventory.AbstractEditorInventory;
+import com.github.wesjd.overcastmappacker.util.Items;
+import com.github.wesjd.overcastmappacker.util.XMLColors;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
+import org.w3c.dom.Element;
+
+import java.util.Arrays;
 
 /*
  * The MIT License (MIT)
@@ -29,13 +35,33 @@ import org.bukkit.entity.Player;
  */
 public class ColorSelectionInventory extends AbstractEditorInventory {
 
-    public ColorSelectionInventory(Player player, XMLWorld xmlWorld, AbstractEditorInventory returnInv) {
-        super(player, returnInv, 54, "Select a Color");
+    private final Element element;
+    private final boolean teamColor;
+
+    public ColorSelectionInventory(Player player, AbstractEditorInventory returnInv, Element element, boolean teamColor) {
+        super(player, returnInv, 54, "Select a Color", true);
+        this.element = element;
+        this.teamColor = teamColor;
+        open();
     }
 
     @Override
     public void build() {
+        final int[] cur = new int[1];
+        final int[] row = new int[1];
+        Arrays.stream(XMLColors.values()).forEach(color -> {
+            final String bold = (element.getAttribute(teamColor ? "color" : "overhead-color").equals(color.toString()) ? ChatColor.BOLD.toString() : "");
+            final MaterialData materialData = color.getMaterial();
+            set((9 * row[0]) + 11 + cur[0]++, Items.build(color.getChatColor() + bold + color.toString(), materialData.getItemType(), materialData.getData()), (clicker, type) -> {
+                element.setAttribute(teamColor ? "color" : "overhead-color", color.toString());
+                returnToPrevious();
+            });
 
+            if(cur[0] == 5) {
+                cur[0] = 0;
+                row[0]++;
+            }
+        });
     }
 
 }

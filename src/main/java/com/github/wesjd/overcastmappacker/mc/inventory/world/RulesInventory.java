@@ -91,8 +91,7 @@ public class RulesInventory extends AbstractEditorInventory {
                 });
                 cur[0]++;
             });
-        } else
-            set(13, Items.build(ChatColor.RED + "No rules", Material.BARRIER, Arrays.asList("Click above to add some!")));
+        } else set(13, Items.build(ChatColor.RED + "No rules", Material.BARRIER, Arrays.asList("Click above to add some!")));
     }
 
 }

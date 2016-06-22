@@ -39,15 +39,15 @@ public abstract class AbstractEditorInventory extends AbstractInventory {
     private final boolean goBack;
 
     public AbstractEditorInventory(Player player, AbstractEditorInventory returnInv, int size, String name) {
-        this(player, returnInv, size, name, true);
+        this(player, returnInv, size, name, false);
     }
 
     public AbstractEditorInventory(Player player, XMLWorld xmlWorld, int size, String name) {
         this(player, xmlWorld, null, size, name, false, false);
     }
 
-    public AbstractEditorInventory(Player player, AbstractEditorInventory returnInv, int size, String name, boolean goBack) {
-        this(player, returnInv.xmlWorld, returnInv, size, name, goBack, false);
+    public AbstractEditorInventory(Player player, AbstractEditorInventory returnInv, int size, String name, boolean manualOpen) {
+        this(player, returnInv.xmlWorld, returnInv, size, name, true, manualOpen);
     }
 
     public AbstractEditorInventory(Player player, XMLWorld xmlWorld, AbstractEditorInventory returnInv, int size, String name, boolean goBack, boolean manualOpen) {

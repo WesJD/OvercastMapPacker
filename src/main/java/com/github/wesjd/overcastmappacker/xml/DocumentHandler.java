@@ -95,19 +95,19 @@ public class DocumentHandler {
         }
     }
 
-    public void add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass) {
-        add(parent, moduleClass, ContinuingMap.empty());
+    public Element add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass) {
+        return add(parent, moduleClass, ContinuingMap.empty());
     }
 
-    public void add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, ContinuingMap<String, String> attributeMapping) {
-        add(parent, moduleClass, null, attributeMapping);
+    public Element add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, ContinuingMap<String, String> attributeMapping) {
+        return add(parent, moduleClass, null, attributeMapping);
     }
 
-    public void add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, String moduleValue) {
-        add(parent, moduleClass, moduleValue, ContinuingMap.empty());
+    public Element add(Class<? extends ParentXMLModule> parent, Class<? extends XMLModule> moduleClass, String moduleValue) {
+        return add(parent, moduleClass, moduleValue, ContinuingMap.empty());
     }
     
-    public void add(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass, String moduleValue, ContinuingMap<String, String> attributeMapping) {
+    public Element add(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass, String moduleValue, ContinuingMap<String, String> attributeMapping) {
         final ParentXMLModule parentModule = getParentModule(parentClass, moduleClass);
         final XMLModule module = XMLModule.of(moduleClass);
 
@@ -122,6 +122,8 @@ public class DocumentHandler {
         parentNode.appendChild(moduleElement);
         
         handleAttributes(module, moduleElement, attributeMapping);
+
+        return moduleElement;
     }
 
     public List<Element> get(Class<? extends ParentXMLModule> parentClass, Class<? extends XMLModule> moduleClass) {
