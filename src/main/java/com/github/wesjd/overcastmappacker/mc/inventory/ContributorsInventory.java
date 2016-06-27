@@ -1,6 +1,5 @@
 package com.github.wesjd.overcastmappacker.mc.inventory;
 
-import com.github.wesjd.overcastmappacker.mc.XMLWorld;
 import com.github.wesjd.overcastmappacker.util.*;
 import com.github.wesjd.overcastmappacker.xml.module.ParentXMLModule;
 import com.github.wesjd.overcastmappacker.xml.module.XMLModule;
@@ -8,13 +7,11 @@ import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.AuthorMod
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.ContributorModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.parents.AuthorsParentModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.main.parents.ContributorsParentModule;
-import net.buildstatic.util.anvilgui.AnvilGUI;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
-import org.omg.CORBA.PRIVATE_MEMBER;
 import org.w3c.dom.Element;
 
 import java.util.Arrays;

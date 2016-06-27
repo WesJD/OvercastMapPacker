@@ -1,7 +1,7 @@
 package com.github.wesjd.overcastmappacker.util;
 
 import com.github.wesjd.overcastmappacker.OvercastMapPacker;
-import net.buildstatic.util.anvilgui.AnvilGUI;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.entity.Player;
 
 /*

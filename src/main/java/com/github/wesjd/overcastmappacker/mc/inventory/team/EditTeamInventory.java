@@ -3,7 +3,7 @@ package com.github.wesjd.overcastmappacker.mc.inventory.team;
 import com.github.wesjd.overcastmappacker.mc.inventory.AbstractEditorInventory;
 import com.github.wesjd.overcastmappacker.util.InputAnvil;
 import com.github.wesjd.overcastmappacker.util.Items;
-import net.buildstatic.util.anvilgui.AnvilGUI;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

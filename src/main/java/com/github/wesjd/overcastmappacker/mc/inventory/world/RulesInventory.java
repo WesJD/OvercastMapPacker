@@ -7,7 +7,7 @@ import com.github.wesjd.overcastmappacker.util.Items;
 import com.github.wesjd.overcastmappacker.util.YesNoInventory;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.matchinfo.RuleModule;
 import com.github.wesjd.overcastmappacker.xml.module.impl.general.matchinfo.parents.RulesParentModule;
-import net.buildstatic.util.anvilgui.AnvilGUI;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
