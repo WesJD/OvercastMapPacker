@@ -6,7 +6,7 @@
 
     <groupId>com.github.wesjd</groupId>
     <artifactId>overcast-map-packer</artifactId>
-    <version>0.2.7</version>
+    <version>0.2.8</version>
 
     <properties>
         <version>${project.version}</version>
@@ -14,9 +14,8 @@
 
     <repositories>
         <repository>
-            <id>buildstatic-repo</id>
-            <name>BuildStatic Repository</name>
-            <url>http://serv.buildstatic.net/maven-repo</url>
+            <id>wesjd-repo</id>
+            <url>http://wesjd.net:8081/repository/thirdparty/</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
@@ -47,15 +46,9 @@
 
         <!-- Compile -->
         <dependency>
-            <groupId>net.buildstatic.util</groupId>
-            <artifactId>safereflections</artifactId>
-            <version>1.1.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.buildstatic.util</groupId>
+            <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
