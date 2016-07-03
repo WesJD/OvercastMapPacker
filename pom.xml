@@ -6,7 +6,7 @@
 
     <groupId>com.github.wesjd</groupId>
     <artifactId>overcast-map-packer</artifactId>
-    <version>0.2.8</version>
+    <version>0.2.9</version>
 
     <properties>
         <version>${project.version}</version>
