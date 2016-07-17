@@ -1,7 +1,6 @@
 # OvercastMapPacker
-[![Join the chat at https://gitter.im/WesJD/OvercastMapPacker](https://badges.gitter.im/WesJD/OvercastMapPacker.svg)](https://gitter.im/WesJD/OvercastMapPacker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-**NO, YOU CAN'T REALLY USE THIS, _YET_**
+**This project is sadly no longer maintained.**
 
 Writes map XMLs for Overcast Network maps from in-game GUIs
 
